@@ -17,7 +17,7 @@ const ChatbotUI = () => {
     const scrollViewRef = useRef();
     const inputRef = useRef(null);
 
-    async function getFalconResponse(prompt) {
+    async function processUserQuery(prompt) {
         try {
             const response = await fetch("http://192.168.0.10:8000/generate", {
                 method: "POST",
@@ -65,7 +65,7 @@ const ChatbotUI = () => {
         try {
             setMessages((prevMessages) => [...prevMessages, userQuery]);
             setInputMessage("");
-            await getFalconResponse(inputMessage);
+            await processUserQuery(inputMessage);
         } catch (error) {
             console.error('Error sending message:', error);
         }
