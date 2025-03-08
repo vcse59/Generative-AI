@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pypdf
+ollama
+chromadb
+python-multipart
+httpx

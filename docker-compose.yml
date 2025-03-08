@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: always
+    ports:
+      - "11434:11434"  # Ollama API port
+    volumes:
+      - ollama_data:/root/.ollama  # Ollama persistent data volume
+    command: ["serve"]
+    networks:
+      - ollama_network
+
+  chatbot-service:
+    build: ./chatbot-service  # Path to the FastAPI Dockerfile
+    container_name: chatbot-service
+    restart: always
+    depends_on:
+      - ollama  # Ensure Ollama is started before FastAPI
+    ports:
+      - "8000:8000"  # FastAPI service port
+    volumes:
+      - vector_db:/app/vector_db  # Persistent volume for vector_db
+    networks:
+      - ollama_network  # Ensure both services are on the same network
+
+  chatbot-app:
+    build: ./chatbot-app  # Path to the React Native Dockerfile
+    container_name: chatbot-app
+    restart: always
+    depends_on:
+      - chatbot-service  # Ensure FastAPI service starts before frontend
+    ports:
+      - "8080:8080"  # Metro Bundler
+      - "19000-19006:19000-19006"  # Expo development ports
+    volumes:
+      - ./chatbot-app:/app  # Mount local code for hot reloading
+      - /app/node_modules  # Ensure node_modules are handled inside the container
+    networks:
+      - ollama_network  # Ensure all services communicate properly
+
+networks:
+  ollama_network:
+    driver: bridge
+
+volumes:
+  ollama_data:  # Named volume for Ollama's data
+  vector_db:  # Named volume for vector database

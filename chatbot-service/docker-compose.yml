@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"  # Ollama API port
+    volumes:
+      - ollama_data:/root/.ollama  # Ollama persistent data volume
+    command: ["serve"]
+    networks:
+      - ollama_network
+
+  fastapi:
+    build: ./  # Path to the FastAPI Dockerfile
+    container_name: fastapi_service
+    restart: unless-stopped
+    depends_on:
+      - ollama  # Ensure Ollama is started before FastAPI
+    ports:
+      - "8000:8000"  # FastAPI service port
+    volumes:
+      - vector_db:/app/vector_db  # Persistent volume for vector_db
+    networks:
+      - ollama_network  # Ensure both services are on the same network
+
+networks:
+  ollama_network:
+    driver: bridge
+
+volumes:
+  ollama_data:  # Named volume for Ollama's data
+  vector_db:  # Named volume for ChromaDB's vector database
