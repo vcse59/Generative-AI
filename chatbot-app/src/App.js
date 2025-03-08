@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     bottom: 60,
     right: 60,
     height: 500,
-    width: 350,
+    width: 450,
     backgroundColor: '#dae7ec', // Chat window color
     borderRadius: 15,
     padding: 10,

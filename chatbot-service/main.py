@@ -5,6 +5,8 @@ from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import json
+import asyncio
+import os
 
 # Initialize the FastAPI application
 app = FastAPI(
@@ -63,21 +65,9 @@ def chunk_text(text, chunk_size=500):
 async def generate_embedding(text):
     """Generates an embedding using Ollama."""
     try:
-        response = httpx.post(f"{OLLAMA_API_URL}/api/embeddings", json={"model": "nomic-embed-text","prompt": text})
-
-        # Check if the response is JSON
-        '''
-        if response.headers.get('Content-Type') == 'application/json':
-            response_data = response.json()
-            print(f"DATA : {response_data}")
-            return response_data['embedding']
-        else:
-            print(f"Unexpected response format: {response.text}")
-            return None
-        '''
+        response = httpx.post(f"{OLLAMA_API_URL}/api/embeddings", json={"model": "nomic-embed-text", "prompt": text})
         response_data = response.json()
         return response_data['embedding']
-
     except httpx.HTTPStatusError as e:
         print(f"HTTP error occurred: {e}")
     except json.JSONDecodeError as e:
@@ -107,8 +97,24 @@ async def query_ollama_with_context(context_chunks, model_name, user_query):
         response_data = response.json()
         return response_data['response']
 
+# Download models using the Ollama REST API with /api/pull
+async def download_ollama_models():
+    """Downloads models from Ollama using API keys and the /api/pull endpoint."""
+    try:
+        model_names = ["nomic-embed-text", "phi3"]  # List of models you want to download
+        for model_name in model_names:
+            print(f"Downloading model: {model_name}")
+            response = httpx.post(f"{OLLAMA_API_URL}/api/pull", json={"model": model_name})
+            if response.status_code == 200:
+                print(f"Model {model_name} downloaded successfully.")
+            else:
+                print(f"Failed to download model {model_name}: {response.text}")
+    except Exception as e:
+        print(f"Error downloading models: {e}")
+        raise  # Re-raise the exception to stop the app startup if download fails
+
 # Upload the PDF file to save the embeddings to vector db
-@app.post("/upload/")
+@app.post("/upload/")  # Endpoint for uploading PDF
 async def upload_pdf(file: UploadFile = File(...)):
     """Uploads a PDF file, extracts text, and stores embeddings."""
     file_path = f"./{file.filename}"
@@ -145,3 +151,9 @@ async def generate_text(request: RequestModel):
     
     # Return the generated response
     return ResponseModel(response=response, request=request.prompt)
+
+# Call the model download function when the application starts
+@app.on_event("startup")
+async def startup_event():
+    """Download models during app startup and block access until it's done."""
+    await download_ollama_models()  # Blocks access until models are downloaded

@@ -2,6 +2,9 @@ version: '3.8'
 
 services:
   ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile.ollama  # Use custom Dockerfile
     image: ollama/ollama
     container_name: ollama
     restart: always
@@ -9,7 +12,6 @@ services:
       - "11434:11434"  # Ollama API port
     volumes:
       - ollama_data:/root/.ollama  # Ollama persistent data volume
-    command: ["serve"]
     networks:
       - ollama_network
 
