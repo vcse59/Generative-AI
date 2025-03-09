@@ -4,7 +4,6 @@ This is a Generative AI application using RAG (Retrieval-augmented generation) a
 
 ![RAG (Retrieval-augmented generation) Architecture](RAG%20Architecture.png)
 
-
 Here are the components used in this application:
 
 - Frontend application (chatbot-app)

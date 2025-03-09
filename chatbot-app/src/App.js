@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar, AppRegistry, Platform } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Linking, StatusBar, AppRegistry, Platform } from 'react-native';
 import ChatbotUI from './components/ChatbotUI';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWindowMinimize, faCircleXmark, faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faWindowMinimize, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 const App = () => {
 
@@ -12,34 +12,53 @@ const App = () => {
     setIsChatVisible(!isChatVisible);
   };
 
+  const handleUpdateKnowledgeSource = () => {
+    // Sample URL for the update knowledge source action
+    const url = 'http://localhost:8000/docs'; // Replace with actual URL
+    Linking.openURL(url).catch(err => console.error("Failed to open URL", err));
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={{ fontWeight: 'bold', fontSize: 22 }}>Welcome to RAG (Retrieval-augmented generation) based chat app</Text>
-      {isChatVisible && (
-        <>
-          <View style={styles.chatWindow}>
-            <View style={styles.chatHeader}>
-              <Text style={styles.chatTitle}>Chat with Us</Text>
-              <View style={styles.chatHeaderActions}>
-                <TouchableOpacity onPress={toggleChatWindow} style={styles.minimizeButton}>
-                  <FontAwesomeIcon icon={faWindowMinimize} size={30} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={toggleChatWindow} style={styles.closeButton}>
-                  <FontAwesomeIcon icon={faCircleXmark} size={30} color="black" />
-                </TouchableOpacity>
+    <>
+      <View style={styles.container}>
+        <Text style={{ fontWeight: 'bold', fontSize: 22 }}>Welcome to RAG (Retrieval-augmented generation) based chat app</Text>
+
+        {/* Update Knowledge Source Button on Home Page */}
+        <TouchableOpacity
+          onPress={handleUpdateKnowledgeSource} // Open the sample link
+          style={styles.updateKnowledgeSourceButton}
+        >
+          <Text style={styles.updateText}>Update Knowledge Source</Text>
+        </TouchableOpacity>
+
+        {isChatVisible && (
+          <>
+            <View style={styles.chatWindow}>
+              <View style={styles.chatHeader}>
+                <Text style={styles.chatTitle}>Chat with Us</Text>
+                <View style={styles.chatHeaderActions}>
+                  <TouchableOpacity onPress={toggleChatWindow} style={styles.minimizeButton}>
+                    <FontAwesomeIcon icon={faWindowMinimize} size={30} color="black" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={toggleChatWindow} style={styles.closeButton}>
+                    <FontAwesomeIcon icon={faCircleXmark} size={30} color="black" />
+                  </TouchableOpacity>
+                </View>
               </View>
+              <ChatbotUI />
             </View>
-            <ChatbotUI />
-          </View>
-        </>
-      )}
-      <TouchableOpacity
-        style={styles.chatButton}
-        onPress={toggleChatWindow}
-      >
-        <Text style={styles.chatIcon}>💬</Text>
-      </TouchableOpacity>
-    </View>
+          </>
+        )}
+
+        {/* Button to open chat */}
+        <TouchableOpacity
+          style={styles.chatButton}
+          onPress={toggleChatWindow}
+        >
+          <Text style={styles.chatIcon}>💬</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 
@@ -61,7 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: '2rem',
-    justifyContent:'flex-start',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#1492c1', // Light background for the entire app
   },
@@ -70,7 +89,7 @@ const styles = StyleSheet.create({
     bottom: 60,
     right: 60,
     height: 500,
-    width: 450,
+    width: 400,
     backgroundColor: '#dae7ec', // Chat window color
     borderRadius: 15,
     padding: 10,
@@ -99,8 +118,20 @@ const styles = StyleSheet.create({
     marginRight: 20, // Adds spacing between minimize and close buttons
     marginBottom: 30
   },
+  updateKnowledgeSourceButton: {
+    backgroundColor: '#0078d4',
+    padding: 10,
+    justifySelf: 'flex-start',
+    borderRadius: 5,
+    marginBottom: 20, // Adds spacing below the button
+    marginTop : '12rem'
+  },
+  updateText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   closeButton: {
-    // Additional button styling if needed
     marginBottom: 20
   }
 });

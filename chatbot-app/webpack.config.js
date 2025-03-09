@@ -20,7 +20,6 @@ module.exports = {
                         presets: [
                             '@babel/preset-env', // Transpiles ES6+ to ES5
                             '@babel/preset-react', // Handles JSX
-                            '@babel/preset-typescript', // For TypeScript files
                         ],
                         plugins: ['@babel/plugin-transform-runtime'], // Optimizes Babel helpers
                     },

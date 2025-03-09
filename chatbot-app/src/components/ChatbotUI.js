@@ -1,57 +1,60 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     StyleSheet,
     View,
-    Text,
     TextInput,
     ScrollView,
     KeyboardAvoidingView,
     Platform,
     Keyboard,
     TouchableOpacity,
+    useWindowDimensions,
 } from 'react-native';
+import RenderHTML from 'react-native-render-html';
 
 const ChatbotUI = () => {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
     const scrollViewRef = useRef();
     const inputRef = useRef(null);
+    const { width } = useWindowDimensions();
+    const MarkdownIt = require('markdown-it');
+    const md = new MarkdownIt();
 
+    // Process user query and fetch response
     async function processUserQuery(prompt) {
         try {
             const response = await fetch("http://localhost:8000/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ model_name: "phi3", prompt: prompt })
+                body: JSON.stringify({ model_name: "falcon", prompt: prompt })
             });
 
-            // Check if the response is OK
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-            const data = await response.json();  // Correctly parse JSON
-            const combinedResponse = data.response || "Please try again"; // Ensure a fallback if empty
+            const data = await response.json();
+            const htmlResponse = md.render(data.response) || "Please try again";
+            const citationLinks = data.citation_links.map(link => {
+                return `<a href="${link.url}" target="_blank">${link.title}</a>`;
+            }).join('<br />'); // Join all citation links with a line break
 
-            if (combinedResponse.length == 0){
-                return getFalconResponse(prompt);
-            }
+            // Combine response and citations
+            const fullResponse = `${htmlResponse}<br /><strong>Citations:</strong><br />${citationLinks}`;
 
-            // Update the message UI progressively with each chunk
             setMessages((prevMessages) => [
                 ...prevMessages,
                 {
                     id: Date.now(),
-                    text: combinedResponse,
+                    text: fullResponse,
                     sender: 'bot',
                 }
             ]);
-
         } catch (error) {
-            console.error("Error fetching Falcon response:", error);
+            console.error("Error fetching response:", error);
         }
     }
-
 
     const handleSendMessage = async () => {
         if (inputMessage.trim() === '') return;
@@ -71,67 +74,59 @@ const ChatbotUI = () => {
         }
 
         Keyboard.dismiss();
-
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
+        inputRef.current?.focus();
     };
 
-    const renderMessage = (item) => {
-        return (
-            <View
-                key={item.id}
-                style={[
-                    styles.messageContainer,
-                    item.sender === 'user' ? styles.userMessage : styles.botMessage,
-                ]}
-            >
-                <Text>{item.text}</Text>
-            </View>
-        );
-    };
-
-    const handleKeyPress = (e) => {
-        if (e.nativeEvent.key === 'Enter') {
-            handleSendMessage();
-        }
-    };
+    const renderMessage = (item) => (
+        <View
+            key={item.id}
+            style={[
+                styles.messageContainer,
+                item.sender === 'user' ? styles.userMessage : styles.botMessage,
+            ]}
+        >
+            {item.sender === 'bot' ? (
+                <RenderHTML contentWidth={width} source={{ html: item.text }} />
+            ) : (
+                <View>
+                    <RenderHTML contentWidth={width} source={{ html: `<p>${item.text}</p>` }} />
+                </View>
+            )}
+        </View>
+    );
 
     return (
-        <>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.chatContainer}
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.chatContainer}
+        >
+            <ScrollView
+                ref={scrollViewRef}
+                onContentSizeChange={() =>
+                    scrollViewRef.current.scrollToEnd({ animated: true })
+                }
+                style={styles.messagesContainer}
             >
-                <ScrollView
-                    ref={scrollViewRef}
-                    onContentSizeChange={() =>
-                        scrollViewRef.current.scrollToEnd({ animated: true })
-                    }
-                    style={styles.messagesContainer}
-                >
-                    {messages.map(renderMessage)}
-                </ScrollView>
+                {messages.map(renderMessage)}
+            </ScrollView>
 
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        ref={inputRef}
-                        style={styles.input}
-                        value={inputMessage}
-                        onChangeText={setInputMessage}
-                        onKeyPress={handleKeyPress}
-                        placeholder="Type your message..."
-                        multiline={false}
-                        numberOfLines={4}
-                        textAlignVertical="auto"
-                        placeholderTextColor="#aaa"
-                    />
-                    <TouchableOpacity onPress={handleSendMessage}>
-                        <Text style={styles.sendButton}>Send</Text>
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
-        </>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    ref={inputRef}
+                    style={styles.input}
+                    value={inputMessage}
+                    onChangeText={setInputMessage}
+                    placeholder="Type your message..."
+                    multiline={false}
+                    placeholderTextColor="#aaa"
+                />
+                <TouchableOpacity onPress={handleSendMessage}>
+                    <View style={styles.sendButton}>
+                        <RenderHTML contentWidth={50} source={{ html: "<strong>Send</strong>" }} />
+                    </View>
+                </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
     );
 };
 
@@ -141,6 +136,7 @@ const styles = StyleSheet.create({
     },
     messagesContainer: {
         flex: 1,
+        paddingHorizontal: 10,
     },
     messageContainer: {
         maxWidth: '80%',
@@ -156,17 +152,18 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-    userMessage: {
-        backgroundColor: '#30b5e7',
-        alignSelf: 'flex-start',
-    },
     botMessage: {
-        backgroundColor: '#73c4e2',
+        backgroundColor: '#30b5e7',
         alignSelf: 'flex-end',
+    },
+    userMessage: {
+        backgroundColor: '#73c4e2',
+        alignSelf: 'flex-start',
     },
     inputContainer: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
+        padding: 10,
     },
     input: {
         flex: 1,
@@ -177,7 +174,6 @@ const styles = StyleSheet.create({
     },
     sendButton: {
         backgroundColor: '#0078d4',
-        color: '#fff',
         paddingHorizontal: 15,
         paddingVertical: 8,
         borderRadius: 10,

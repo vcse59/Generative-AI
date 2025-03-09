@@ -37,7 +37,7 @@ RUN sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2" "emu
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package.json
 COPY package.json ./ 
 
 # Install project dependencies
@@ -50,4 +50,4 @@ COPY . .
 EXPOSE 8080
 
 # Serve the app using the `serve` package
-CMD ["npm", "run", "web"]
+CMD ["npm", "start"]
