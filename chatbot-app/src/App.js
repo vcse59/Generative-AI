@@ -14,7 +14,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontWeight: 'bold', fontSize: 30 }}>Welcome to Chat application calling custom agent microservice</Text>
+      <Text style={{ fontWeight: 'bold', fontSize: 22 }}>Welcome to RAG (Retrieval-augmented generation) based chat app</Text>
       {isChatVisible && (
         <>
           <View style={styles.chatWindow}>
@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    marginTop: '2rem',
+    justifyContent:'flex-start',
     alignItems: 'center',
     backgroundColor: '#1492c1', // Light background for the entire app
   },
@@ -96,10 +97,11 @@ const styles = StyleSheet.create({
   },
   minimizeButton: {
     marginRight: 20, // Adds spacing between minimize and close buttons
-    marginBottom: 20
+    marginBottom: 30
   },
   closeButton: {
     // Additional button styling if needed
+    marginBottom: 20
   }
 });
 

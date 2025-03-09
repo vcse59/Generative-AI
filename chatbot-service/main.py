@@ -81,7 +81,7 @@ async def retrieve_relevant_chunks(query, top_k=3):
     """Retrieves relevant chunks from the vector database."""
     query_embedding = await generate_embedding(query)
     results = collection.query(query_embeddings=query_embedding, n_results=top_k)
-    print(f"retrieve_relevant_chunks : {results}")
+    #print(f"retrieve_relevant_chunks : {results}")
     return [item['text'] for item in results['metadatas'][0]]
 
 # Create prompt and query Ollama model via REST API
@@ -103,7 +103,7 @@ async def download_ollama_models():
     try:
         model_names = ["nomic-embed-text", "phi3"]  # List of models you want to download
         for model_name in model_names:
-            print(f"Downloading model: {model_name}")
+            #print(f"Downloading model: {model_name}")
             response = httpx.post(f"{OLLAMA_API_URL}/api/pull", json={"model": model_name})
             if response.status_code == 200:
                 print(f"Model {model_name} downloaded successfully.")
@@ -125,7 +125,7 @@ async def upload_pdf(file: UploadFile = File(...)):
     text = extract_text_from_pdf(file_path)
     chunks = chunk_text(text, chunk_size=500)
 
-    print(f"chunks : {chunks}")
+    #print(f"chunks : {chunks}")
     for idx, chunk in enumerate(chunks):
         embedding = await generate_embedding(chunk)
         collection.add(
