@@ -165,7 +165,7 @@ async def generate_text(request: RequestModel):
 async def download_ollama_models():
     """Downloads necessary models using Ollama API."""
     try:
-        model_names = ["nomic-embed-text", "falcon"]  # List of models
+        model_names = ["nomic-embed-text", "llama3"]  # List of models
         for model_name in model_names:
             response = httpx.post(f"{OLLAMA_API_URL}/api/pull", json={"model": model_name})
             if response.status_code == 200:

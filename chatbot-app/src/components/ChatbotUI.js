@@ -27,7 +27,7 @@ const ChatbotUI = () => {
             const response = await fetch("http://localhost:8000/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ model_name: "falcon", prompt: prompt })
+                body: JSON.stringify({ model_name: "llama3", prompt: prompt })
             });
 
             if (!response.ok) {
