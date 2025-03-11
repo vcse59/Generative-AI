@@ -5,3 +5,4 @@ ollama
 chromadb
 python-multipart
 httpx
+python-dotenv

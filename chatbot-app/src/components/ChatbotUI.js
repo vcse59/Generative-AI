@@ -11,6 +11,7 @@ import {
     useWindowDimensions,
 } from 'react-native';
 import RenderHTML from 'react-native-render-html';
+import { OLLAMA_LLM_MODEL_NAME } from '@env';
 
 const ChatbotUI = () => {
     const [messages, setMessages] = useState([]);
@@ -27,7 +28,7 @@ const ChatbotUI = () => {
             const response = await fetch("http://localhost:8000/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ model_name: "llama3", prompt: prompt })
+                body: JSON.stringify({ model_name: OLLAMA_LLM_MODEL_NAME, prompt: prompt })
             });
 
             if (!response.ok) {

@@ -8,6 +8,10 @@ from fastapi.responses import FileResponse
 import json
 import os
 import asyncio
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -15,6 +19,16 @@ app = FastAPI(
     description="Retrieval-Augmented Generation (RAG) API using PDFs as a knowledge source.",
     version="1.0.0"
 )
+
+# Specify the absolute or relative path to the .env file
+dotenv_path = os.path.join(os.path.dirname(__file__), '../config/.env')
+
+# Load the .env file from the given path
+load_dotenv(dotenv_path=dotenv_path)
+
+# Access variables
+OLLAMA_EMBED_MODEL_NAME =   os.getenv("OLLAMA_EMBED_MODEL_NAME")
+OLLAMA_LLM_MODEL_NAME   =   os.getenv("OLLAMA_LLM_MODEL_NAME")
 
 # CORS Middleware
 app.add_middleware(
@@ -165,7 +179,7 @@ async def generate_text(request: RequestModel):
 async def download_ollama_models():
     """Downloads necessary models using Ollama API."""
     try:
-        model_names = ["nomic-embed-text", "llama3"]  # List of models
+        model_names = [OLLAMA_EMBED_MODEL_NAME, OLLAMA_LLM_MODEL_NAME]  # List of models
         for model_name in model_names:
             response = httpx.post(f"{OLLAMA_API_URL}/api/pull", json={"model": model_name})
             if response.status_code == 200:

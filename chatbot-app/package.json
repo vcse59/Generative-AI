@@ -17,6 +17,7 @@
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.3",
     "react-native": "^0.76.6",
+    "react-native-dotenv": "^3.4.11",
     "react-native-markdown-display": "^7.0.2",
     "react-native-render-html": "^6.3.4",
     "react-native-web": "^0.19.13",
