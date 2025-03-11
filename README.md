@@ -1,4 +1,4 @@
-# RAG (Retrieval-augmented generation) based application
+# RAG (Retrieval-augmented generation) based Gen AI application
 
 This is a Generative AI application using RAG (Retrieval-augmented generation) approach to use PDF as a knowledge source and process user query.
 
