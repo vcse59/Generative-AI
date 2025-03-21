@@ -52,8 +52,7 @@ module.exports = {
         alias: {
             'react-native$': 'react-native-web', // Ensures React Native components are resolved to web equivalents
             // Mock Platform module for web usage
-            'react-native/Libraries/Utilities/Platform': path.resolve(__dirname, 'src/platform-web.js'),
-            'react-native-webview': 'react-native-web-webview',
+            'react-native/Libraries/Utilities/Platform': path.resolve(__dirname, 'src/platform-web.js')
         },
         extensions: ['.web.js', '.js', '.json', '.jsx'], // Support for JSX files
     },
