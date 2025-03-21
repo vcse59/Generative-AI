@@ -7,7 +7,6 @@ WORKDIR /app
 # Copy the application files
 COPY requirements.txt .
 COPY main.py .
-COPY vector_db/ ./vector_db/
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
