@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, WebSocket
+from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import io
 import redis.asyncio as redis
@@ -11,8 +12,33 @@ import logging
 import hashlib
 import requests
 import os
+import httpx
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
+
+# Specify the absolute or relative path to the .env file
+dotenv_path = os.path.join(os.path.dirname(__file__), '../config/.env')
+
+# Load the .env file from the given path
+load_dotenv(dotenv_path=dotenv_path)
+
+# CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# Access variables
+OLLAMA_EMBED_MODEL_NAME =   os.getenv("OLLAMA_EMBED_MODEL_NAME")
+OLLAMA_LLM_MODEL_NAME   =   os.getenv("OLLAMA_LLM_MODEL_NAME")
 
 # Connect to Redis
 cache = redis.Redis(host="redis", port=6379, decode_responses=True)
@@ -34,7 +60,7 @@ logger = logging.getLogger(__name__)
 
 def generate_text(prompt: str) -> str:
     url = f"{OLLAMA_API_URL}/api/generate"
-    data = {"model": "llava", "prompt": prompt, "stream": False}
+    data = {"model": OLLAMA_LLM_MODEL_NAME, "prompt": prompt, "stream": False}
     try:
         response = requests.post(url, json=data)
         response.raise_for_status()
@@ -45,7 +71,7 @@ def generate_text(prompt: str) -> str:
 
 def generate_embeddings(prompt: str) -> np.ndarray:
     url = f"{OLLAMA_API_URL}/api/embeddings"
-    data = {"model": "nomic-embed-text", "prompt": prompt}
+    data = {"model": OLLAMA_EMBED_MODEL_NAME, "prompt": prompt}
     try:
         response = requests.post(url, json=data)
         response.raise_for_status()
@@ -137,3 +163,24 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         await websocket.close()
         logger.info("WebSocket disconnected")
+
+# Function to Download Ollama Models
+async def download_ollama_models():
+    """Downloads necessary models using Ollama API."""
+    try:
+        model_names = [OLLAMA_EMBED_MODEL_NAME, OLLAMA_LLM_MODEL_NAME]  # List of models
+        for model_name in model_names:
+            response = httpx.post(f"{OLLAMA_API_URL}/api/pull", json={"model": model_name})
+            if response.status_code == 200:
+                print(f"Model {model_name} downloaded successfully.")
+            else:
+                print(f"Failed to download model {model_name}: {response.text}")
+    except Exception as e:
+        print(f"Error downloading models: {e}")
+        raise
+
+# Call the model download function on startup
+@app.on_event("startup")
+async def startup_event():
+    """Download models at startup."""
+    await download_ollama_models()
