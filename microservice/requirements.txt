@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+ollama
+pillow
+numpy
+redis
+faiss-cpu
+chromadb
+pytesseract
+websockets
+python-multipart
