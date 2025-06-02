@@ -55,8 +55,25 @@ git checkout mcp-client-server-e2e
 
 ####    - Ensure the python virtual environment is created and active.
 
+- Unix/Linux/macOS (bash/zsh/fish)
+
 ```bash
-cd $(git rev-parse --show-toplevel)
+cd "$(git rev-parse --show-toplevel)"
+```
+
+- PowerShell (Windows)
+
+```bash
+cd (git rev-parse --show-toplevel)
+```
+
+- Command Prompt (cmd.exe on Windows)
+ 
+```bash
+for /f "delims=" %i in ('git rev-parse --show-toplevel') do cd "%i"
+```
+
+```bash
 python -m venv .venv
 .venv\Scripts\activate # Run command as per OS
 ```
