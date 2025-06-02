@@ -48,11 +48,11 @@ It it recommended to use docker to run ollama. Check out [README.md](ollama/READ
 
 **Clone the repository:**
 
-    ```bash
-    git clone https://github.com/vcse59/GenerativeAI.git
-    cd GenerativeAI
-    git checkout mcp-client-server-e2e
-    ```
+```bash
+git clone https://github.com/vcse59/GenerativeAI.git
+cd GenerativeAI
+git checkout mcp-client-server-e2e
+```
 ### Native:
 
 1. **Install dependencies for each component:**
