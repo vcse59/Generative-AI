@@ -44,8 +44,6 @@ It it recommended to use docker to run ollama. Check out [README.md](ollama/READ
 
 ### Pre-requisite
 
-####    - Ensure the python virtual environment is created and active.
-
 **Clone the repository:**
 
 ```bash
@@ -56,6 +54,14 @@ python -m venv .venv
 .venv\Scripts\activate # Run command as per OS
 ```
 ### Native:
+
+####    - Ensure the python virtual environment is created and active.
+
+```bash
+cd $(git rev-parse --show-toplevel)
+python -m venv .venv
+.venv\Scripts\activate # Run command as per OS
+```
 
 1. **Install dependencies for each component:**
     ```bash
