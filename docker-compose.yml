@@ -16,8 +16,6 @@ services:
     build: ./mcp-server  # Path to the MCP Server Dockerfile
     container_name: mcp_server
     restart: always
-    depends_on:
-      - ollama  # Ensure Ollama is started before FastAPI
     ports:
       - "8080:8080"  # MCP Server port
     networks:
@@ -33,6 +31,7 @@ services:
       - OLLAMA_API_URL=http://ollama:11434  # Ollama API URL
     depends_on:
       - mcp-server  # Ensure MCP Server is started before mcp-client
+      - ollama # Ensure Ollama is available for the client
     ports:
       - "8000:8000"  # MCP Client service port
     networks:
@@ -43,8 +42,6 @@ services:
     restart: always
     depends_on:
       - mcp-client  # Ensure mcp-client service starts before frontend
-      - ollama  # Ensure Ollama is available for the chat app
-      - mcp-server  # Ensure MCP Server is available for the chat app
     ports:
       - "5000:5000"
     networks:

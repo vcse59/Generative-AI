@@ -25,6 +25,28 @@ MCP_SERVER_ENDPOINT = os.environ.get("MCP_SERVER_ENDPOINT")  # MCP server endpoi
 # Ollama API URL
 OLLAMA_API_URL = os.environ.get("OLLAMA_API_URL")  # Ollama API URL, can be overridden by setting shell variable
 
+async def is_model_downloaded() -> bool:
+    """
+    Checks if the specified Ollama model is downloaded locally.
+
+    Args:
+        model_name (str): The name of the model to check (e.g. "llama3").
+
+    Returns:
+        bool: True if the model is downloaded, False otherwise.
+    """
+    try:
+        print(f"🔄 Checking Ollama model: {OLLAMA_LLM_MODEL_NAME}...")
+        response = requests.get(f"{OLLAMA_API_URL}/api/tags")
+        response.raise_for_status()
+        models = response.json().get("models", [])
+
+        return any(model["name"] == OLLAMA_LLM_MODEL_NAME for model in models)
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error checking model availability: {e}")
+        return False
+
 # Function to Download Ollama Models
 async def download_ollama_models():
     """Downloads necessary models using Ollama API."""

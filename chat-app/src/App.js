@@ -1,45 +1,93 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Linking, StatusBar, AppRegistry, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import ChatbotUI from './components/ChatbotUI';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowMinimize, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
-const App = () => {
+const HEALTH_API_URL = 'http://127.0.0.1:8000/health';
 
+const App = () => {
   const [isChatVisible, setIsChatVisible] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [healthStatus, setHealthStatus] = useState('checking'); // 'checking', 'ok', 'fail'
+  const [healthText, setHealthText] = useState(''); // 'checking', 'ok', 'fail'
+  const [healthColor, setHealthColor] = useState('#888'); // 'checking', 'ok', 'fail'
 
   const toggleChatWindow = () => {
     setIsChatVisible(!isChatVisible);
   };
 
+  useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const res = await fetch(HEALTH_API_URL, { method: 'GET', headers: { "Content-Type": "application/json" } });
+        const data = await res.json();
+        console.log("Health check response JSON:", data.status);
+        if (data.status === 'healthy') {
+          setHealthStatus('ok');
+          setIsInitialized(true);
+          setHealthText('Service is up and running...Ready to chat!');
+          setHealthColor('green');
+        } else if (data.status === 'wait') {
+          setHealthStatus('wait');
+          setHealthText('Service is initializing, please wait...');
+          setHealthColor('orange');
+          setIsInitialized(false);
+        } else {
+          setHealthStatus('fail');
+          setHealthText('Service is unavailable');
+          setHealthColor('red');
+          setIsInitialized(false);
+        }
+      } catch (e) {
+        setHealthStatus('fail');
+        setHealthText('Service is unavailable');
+        setHealthColor('red');
+        setIsInitialized(false);
+      }
+    };
+
+    checkHealth();
+    // Optionally, poll every 30s:
+    const interval = setInterval(checkHealth, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <View style={styles.container}>
-        <Text style={{ fontWeight: 'bold', fontSize: 22, alignContent : 'center' }}>Welcome to chat app based on mcp client and server implementation (E2E)</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 22, alignContent: 'center' }}>
+          Welcome to chat app based on mcp client and server implementation (E2E)
+        </Text>
+        <Text style={{ marginTop: 20, marginBottom: 10, color: healthColor, fontWeight: 'bold' , fontSize: 28 }}>
+          {healthText}
+        </Text>
 
-        {isChatVisible && (
-          <>
-            <View style={styles.chatWindow}>
-              <View style={styles.chatHeader}>
-                <Text style={styles.chatTitle}>Chat with Us</Text>
-                <View style={styles.chatHeaderActions}>
-                  <TouchableOpacity onPress={toggleChatWindow} style={styles.minimizeButton}>
-                    <FontAwesomeIcon icon={faWindowMinimize} size={30} color="black" />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={toggleChatWindow} style={styles.closeButton}>
-                    <FontAwesomeIcon icon={faCircleXmark} size={30} color="black" />
-                  </TouchableOpacity>
-                </View>
+        {isChatVisible && isInitialized && (
+          <View style={styles.chatWindow}>
+            <View style={styles.chatHeader}>
+              <Text style={styles.chatTitle}>Chat with Us</Text>
+              <View style={styles.chatHeaderActions}>
+                <TouchableOpacity onPress={toggleChatWindow} style={styles.minimizeButton}>
+                  <FontAwesomeIcon icon={faWindowMinimize} size={30} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={toggleChatWindow} style={styles.closeButton}>
+                  <FontAwesomeIcon icon={faCircleXmark} size={30} color="black" />
+                </TouchableOpacity>
               </View>
-              <ChatbotUI />
             </View>
-          </>
+            <ChatbotUI />
+          </View>
         )}
 
         {/* Button to open chat */}
         <TouchableOpacity
-          style={styles.chatButton}
+          style={[
+            styles.chatButton,
+            healthStatus !== 'ok' && styles.chatButtonDisabled
+          ]}
           onPress={toggleChatWindow}
+          disabled={healthStatus !== 'ok'}
         >
           <Text style={styles.chatIcon}>💬</Text>
         </TouchableOpacity>
@@ -58,6 +106,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    opacity: 1,
+  },
+  chatButtonDisabled: {
+    backgroundColor: '#aaa',
+    opacity: 0.5,
   },
   chatIcon: {
     color: '#fff',
@@ -68,7 +121,7 @@ const styles = StyleSheet.create({
     marginTop: '2rem',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#1492c1', // Light background for the entire app
+    backgroundColor: '#1492c1',
   },
   chatWindow: {
     position: 'fixed',
@@ -76,7 +129,7 @@ const styles = StyleSheet.create({
     right: 60,
     height: 500,
     width: 400,
-    backgroundColor: '#dae7ec', // Chat window color
+    backgroundColor: '#dae7ec',
     borderRadius: 15,
     padding: 10,
     shadowColor: '#000',
@@ -87,30 +140,30 @@ const styles = StyleSheet.create({
   chatHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between', // Ensures space between title and actions
+    justifyContent: 'space-between',
     padding: 5,
-    backgroundColor: '#dae7ec', // Optional styling
+    backgroundColor: '#dae7ec',
   },
   chatTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    flex: 1, // Ensures the title takes up remaining space
+    flex: 1,
   },
   chatHeaderActions: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   minimizeButton: {
-    marginRight: 20, // Adds spacing between minimize and close buttons
-    marginBottom: 30
+    marginRight: 20,
+    marginBottom: 30,
   },
   updateKnowledgeSourceButton: {
     backgroundColor: '#0078d4',
     padding: 10,
     justifySelf: 'flex-start',
     borderRadius: 5,
-    marginBottom: 20, // Adds spacing below the button
-    marginTop : '12rem'
+    marginBottom: 20,
+    marginTop: '12rem',
   },
   updateText: {
     color: '#fff',
@@ -118,8 +171,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   closeButton: {
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 export default App;

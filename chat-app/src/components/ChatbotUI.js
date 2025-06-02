@@ -11,6 +11,8 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
+const HEALTHCHECK_INTERVAL = 10000; // 10 seconds
+
 const ChatbotUI = () => {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
@@ -18,6 +20,7 @@ const ChatbotUI = () => {
     const inputRef = useRef(null);
 
     async function processUserQuery(prompt) {
+        
         try {
             const response = await fetch("http://127.0.0.1:8000/process", {
                 method: "POST",
@@ -25,15 +28,13 @@ const ChatbotUI = () => {
                 body: JSON.stringify({ "user_query": prompt }),
             });
 
-            // Check if the response is OK
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-            const data = await response.json();  // Correctly parse JSON
-            const combinedResponse = data.response || "Please try again"; // Ensure a fallback if empty
+            const data = await response.json();
+            const combinedResponse = data.response || "Please try again";
 
-            // Update the message UI progressively with each chunk
             setMessages((prevMessages) => [
                 ...prevMessages,
                 {
@@ -42,12 +43,10 @@ const ChatbotUI = () => {
                     sender: 'bot',
                 }
             ]);
-
         } catch (error) {
             console.error("Error fetching response:", error);
         }
     }
-
 
     const handleSendMessage = async () => {
         if (inputMessage.trim() === '') return;

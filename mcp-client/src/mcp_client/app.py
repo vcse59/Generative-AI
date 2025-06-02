@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .model import MCPClientModelRequest, MCPClientModelResponse
 
-from .client import handle_input, download_ollama_models
+from .client import handle_input, download_ollama_models, is_model_downloaded
 
 app = FastAPI()
 
@@ -27,6 +27,17 @@ async def process_data(data : MCPClientModelRequest) -> MCPClientModelResponse:
     response_message = await handle_input(data.user_query)
     return MCPClientModelResponse(response=response_message)
 
+@app.get("/health")
+async def health_check():
+    """
+    Health check endpoint to verify the API is running.
+    """
+    try:
+        if await is_model_downloaded():
+            return {"status": "wait", "message": "Ollama models not downloaded yet."}
+        return {"status": "healthy"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 # Call the model download function on startup
 @app.on_event("startup")
