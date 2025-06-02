@@ -20,7 +20,7 @@ MCP Client for interacting with the MCP Server and utilizing available tools (e.
 1. Navigate to the project directory:
 
     ```bash
-    cd $(git rev-parse --show-toplevel)/mcp-client
+    cd mcp-client
     ```
 
 2. Create a Python virtual environment:

@@ -20,7 +20,7 @@ MCP Server with a list of tools (e.g., arithmetic operations in this repo) to pe
 1. Navigate to the project directory:
 
     ```bash
-    cd $(git rev-parse --show-toplevel)/mcp-server
+    cd mcp-server
     ```
 
 2. Create a Python virtual environment:

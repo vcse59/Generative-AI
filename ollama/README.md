@@ -9,13 +9,7 @@ This guide provides instructions to build and run the Ollama Docker image using 
 ## Build the Docker Image
 
 1. Clone the Ollama repository or ensure you have a Dockerfile for Ollama.
-2. Open a terminal and navigate to the directory containing the Dockerfile.
-    
-    ```bash
-    cd $(git rev-parse --show-toplevel)/ollama
-    ```
-
-3. Build the Docker image:
+2. Open a terminal and build the Docker image:
 
     ```bash
     docker build -t ollama .

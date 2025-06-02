@@ -17,7 +17,7 @@ A `Dockerfile` is provided to run the React Native Metro bundler in a containeri
 From the project root, build the Docker image:
 
 ```sh
-docker build -t chat-app-metro .
+docker build -t chat-app .
 ```
 
 ### Start the Metro Bundler
@@ -25,7 +25,7 @@ docker build -t chat-app-metro .
 Run the Metro bundler in a container, mounting your project directory:
 
 ```sh
-docker run --rm -it -p 5000:5000 chat-app-metro
+docker run --rm -it -p 5000:5000 chat-app
 ```
 
 ### Connect Your App

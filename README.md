@@ -53,30 +53,48 @@ git checkout mcp-client-server-e2e
 ```
 ### Native:
 
-####    - Ensure the python virtual environment is created and active.
+#### Navigate to repository root directory:
 
-- Unix/Linux/macOS (bash/zsh/fish)
+- **Unix/Linux/macOS (bash/zsh/fish)**
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 ```
 
-- PowerShell (Windows)
+- **PowerShell (Windows)**
 
 ```bash
 cd (git rev-parse --show-toplevel)
 ```
 
-- Command Prompt (cmd.exe on Windows)
+- **Command Prompt (cmd.exe on Windows)**
  
 ```bash
 for /f "delims=" %i in ('git rev-parse --show-toplevel') do cd "%i"
 ```
 
-```bash
-python -m venv .venv
-.venv\Scripts\activate # Run command as per OS
-```
+#### Create, activate a Python virtual environment and install poetry using pip:
+
+- **Windows (Command Prompt):**
+    ```bash
+    python -m venv .venv
+    .venv\Scripts\activate
+    pip install poetry
+    ```
+
+- **Windows (PowerShell):**
+    ```powershell
+    python -m venv .venv
+    .venv\Scripts\Activate.ps1
+    pip install poetry
+    ```
+
+- **Unix/Linux/macOS (bash/zsh):**
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install poetry
+    ```
 
 1. **Install dependencies for each component:**
     ```bash
@@ -87,9 +105,8 @@ python -m venv .venv
     cd ../mcp-client
     poetry install
 
-2. **Start the MCP server in new terminal with active virtual envrionment:**
+2. **Navigate to mcp-server project and start the MCP server in new terminal with active virtual envrionment:**
     ```bash
-    cd $(git rev-parse --show-toplevel)/mcp-server
     poetry run mcp-server
     ```
 
@@ -99,9 +116,6 @@ python -m venv .venv
 
 4. **Navigate to MCP client root directory in new terminal and configure following bash variables for mcp-client**
 
-    ```bash
-    cd $(git rev-parse --show-toplevel)/mcp-client
-    ```
     ### Environment variables are:
 
     ```bash
@@ -110,14 +124,13 @@ python -m venv .venv
     OLLAMA_API_URL=http://127.0.0.1:11434
     ```
 
-5. **Start the MCP client in new terminal with active virtual envrionment:**
+5. **Navigate to mcp-client project and start the MCP client in new terminal with active virtual envrionment:**
     ```bash
     poetry run uvicorn src.mcp_client.app:app --host 0.0.0.0 --port 8000 --reload
     ```
 
-6. **Start the chat app in new terminal:**
+6. **Navigate to chat-app project and start the chat app in new terminal:**
     ```bash
-    cd $(git rev-parse --show-toplevel)/chat-app
     npm start
     ```
 
@@ -125,11 +138,7 @@ python -m venv .venv
 
 You can run all components using Docker Compose for easier setup and deployment.
 
-Navigate to repoistory root directory:
-
-```bash
-cd $(git rev-parse --show-toplevel)/chat-app
-```
+- Navigate to repoistory root directory
 
 
 1. **Build and start all services:**
