@@ -50,8 +50,6 @@ It it recommended to use docker to run ollama. Check out [README.md](ollama/READ
 git clone https://github.com/vcse59/GenerativeAI.git
 cd GenerativeAI
 git checkout mcp-client-server-e2e
-python -m venv .venv
-.venv\Scripts\activate # Run command as per OS
 ```
 ### Native:
 
