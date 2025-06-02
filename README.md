@@ -25,42 +25,36 @@ This project demonstrates a generative AI system with a chat interface. It is di
 
 ### [chat-app](chat-app)
 
-A user-friendly web interface for interacting with the generative AI. Built with modern web technologies.
-
-Check out [README.md](chat-app/README.md)
+A user-friendly web interface for interacting with the generative AI. Built with modern web technologies. Check out [README.md](chat-app/README.md)
 
 ### [mcp-client](mcp-client)
 
-Handles communication between the chat-app and the mcp-server. Responsible for sending user messages and receiving AI responses.
-
-Check out [README.md](mcp-client/README.md)
+Handles communication between the chat-app and the mcp-server. Responsible for sending user messages and receiving AI responses. Check out [README.md](mcp-client/README.md)
 
 ### [mcp-server](mcp-server)
 
-The backend service that processes requests and generates responses using AI models.
-
-Check out [README.md](mcp-server/README.md)
+The backend service that processes requests and generates responses using AI models. Check out [README.md](mcp-server/README.md)
 
 ### [Ollama](ollama)
 
 This is the docker service to use run ollama as a docker image. 
-It it recommended to use docker to run ollama.
-
-Check out [README.md](ollama/README.md)
+It it recommended to use docker to run ollama. Check out [README.md](ollama/README.md)
 
 ## Getting Started
 
-**Pre-requisite**
+### Pre-requisite
 
-    - Ensure the python virtual environment is created and active.
+####    - Ensure the python virtual environment is created and active.
 
-1. **Clone the repository:**
+**Clone the repository:**
     ```bash
     git clone https://github.com/vcse59/GenerativeAI.git
     cd GenerativeAI
     git checkout mcp-client-server-e2e
     ```
-2. **Install dependencies for each component:**
+### Native:
+
+1. **Install dependencies for each component:**
     ```bash
     cd chat-app
     npm install
@@ -69,17 +63,17 @@ Check out [README.md](ollama/README.md)
     cd ../mcp-client
     poetry install
 
-3. **Start the MCP server in new terminal with active virtual envrionment:**
+2. **Start the MCP server in new terminal with active virtual envrionment:**
     ```bash
     cd $(git rev-parse --show-toplevel)/mcp-server
     poetry run mcp-server
     ```
 
-4. **Follow the instructions to start the ollama service in docker in new terminal:**
+3. **Follow the instructions to start the ollama service in docker in new terminal:**
 
-    [Ollama](ollama/README.md)
+    [**Ollama**](ollama/README.md)
 
-5. **Navigate to MCP client root directory in new terminal and configure following bash variables for mcp-client**
+4. **Navigate to MCP client root directory in new terminal and configure following bash variables for mcp-client**
 
     ```bash
     cd $(git rev-parse --show-toplevel)/mcp-client
@@ -87,23 +81,23 @@ Check out [README.md](ollama/README.md)
     ### Environment variables are:
 
     ```bash
-    OLLAMA_LLM_MODEL_NAME=llama3.2
+    OLLAMA_LLM_MODEL_NAME=llama3.2 # Can be changed
     MCP_SERVER_ENDPOINT=http://127.0.0.1:8080/mcp
     OLLAMA_API_URL=http://127.0.0.1:11434
     ```
 
-6. **Start the MCP client in new terminal with active virtual envrionment:**
+5. **Start the MCP client in new terminal with active virtual envrionment:**
     ```bash
     poetry run uvicorn src.mcp_client.app:app --host 0.0.0.0 --port 8000 --reload
     ```
 
-7. **Start the chat app in new terminal:**
+6. **Start the chat app in new terminal:**
     ```bash
     cd $(git rev-parse --show-toplevel)/chat-app
     npm start
     ```
 
-## Docker
+### Docker
 
 You can run all components using Docker Compose for easier setup and deployment.
 
