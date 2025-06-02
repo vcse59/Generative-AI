@@ -47,6 +47,7 @@ It it recommended to use docker to run ollama. Check out [README.md](ollama/READ
 ####    - Ensure the python virtual environment is created and active.
 
 **Clone the repository:**
+
     ```bash
     git clone https://github.com/vcse59/GenerativeAI.git
     cd GenerativeAI
