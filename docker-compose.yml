@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile.ollama  # Use custom Dockerfile
+    image: ollama/ollama
+    container_name: ollama
+    restart: always
+    ports:
+      - "11434:11434"  # Ollama API port
+    volumes:
+      - ollama_data:/root/.ollama  # Ollama persistent data volume
+    networks:
+      - ollama_network
+
+  mcp-server:
+    build: ./mcp-server  # Path to the MCP Server Dockerfile
+    container_name: mcp_server
+    restart: always
+    depends_on:
+      - ollama  # Ensure Ollama is started before FastAPI
+    ports:
+      - "8080:8080"  # MCP Server port
+    networks:
+      - ollama_network  # Ensure both services are on the same network
+
+  mcp-client:
+    build: ./mcp-client  # Path to the MCP Client Dockerfile
+    container_name: mcp_client
+    restart: always
+    environment:
+      - OLLAMA_LLM_MODEL_NAME=llama3.2  # Specify the LLM model name
+    depends_on:
+      - mcp-server  # Ensure MCP Server is started before mcp-client
+    ports:
+      - "8000:8000"  # MCP Client service port
+    networks:
+      - ollama_network  # Ensure both services are on the same network
+
+networks:
+  ollama_network:
+    driver: bridge
+
+volumes:
+  ollama_data:  # Named volume for Ollama's data

@@ -1,0 +1,24 @@
+[project]
+name = "mcp-server"
+version = "0.1.0"
+description = "A Model Context Protocol server providing tools for LLMs to perform arithmetic operations."
+requires-python = ">=3.12"
+keywords = ["mcp", "llm", "server", "arithmetic"]
+authors = [
+    {name = "Vivek Yadav",email = "v.cse59@gmail.com"}
+]
+dependencies = [
+    "mcp (>=1.9.2,<2.0.0)",
+    "fastmcp (>=2.5.2,<3.0.0)",
+    "pydantic (>=2.11.5,<3.0.0)"
+]
+
+[tool.poetry.scripts]
+mcp-server = "mcp_server.__init__:main"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
