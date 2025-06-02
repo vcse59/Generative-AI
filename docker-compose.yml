@@ -38,6 +38,18 @@ services:
       - "8000:8000"  # MCP Client service port
     networks:
       - ollama_network  # Ensure both services are on the same network
+  chat_app:
+    build: ./chat-app  # Path to the React Native Dockerfile
+    container_name: chat-app
+    restart: always
+    depends_on:
+      - mcp-client  # Ensure mcp-client service starts before frontend
+      - ollama  # Ensure Ollama is available for the chat app
+      - mcp-server  # Ensure MCP Server is available for the chat app
+    ports:
+      - "5000:5000"
+    networks:
+      - ollama_network  # Ensure all services communicate properly
 
 networks:
   ollama_network:

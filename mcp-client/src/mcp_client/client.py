@@ -86,7 +86,7 @@ Respond ONLY in this JSON format (no explanation or extra text) and give error d
 """
     return system_prompt.strip()
 
-async def build_generative_prompt(output_response: str, user_prompt: str) -> str:
+async def build_generative_response_prompt(output_response: str, user_prompt: str) -> str:
     """
     Build a prompt for the LLM to generate a response based on the tool call output.
     """
@@ -94,9 +94,8 @@ async def build_generative_prompt(output_response: str, user_prompt: str) -> str
         return "No valid response from the tool call."
 
     generative_prompt = f"""You are a helpful assistant that generates a response based on the tool call output.
-Tool Call Output:
+Output to User Query {user_prompt} is as follows:
 {output_response}
-User Query: {user_prompt}
 Respond ONLY in string format, no JSON or extra text.
 """
     return generative_prompt.strip()
@@ -135,6 +134,13 @@ async def call_ollama(prompt: str, model="llama3.2") -> dict:
 
         # Remove Markdown-style code block
         cleaned = re.sub(r'^```json\n|```$|\\\"', '', raw_output.strip(), flags=re.MULTILINE)
+
+        # Remove "quotes at the start and end if they exist
+        if cleaned.startswith('"') and cleaned.endswith('"'):
+            # Remove only if the string is not empty
+            if len(cleaned) > 1:
+                # Strip the quotes
+                cleaned = cleaned[1:-1]
 
         return cleaned
     except Exception as e:
@@ -225,8 +231,9 @@ async def run(available_tools: list, user_query: str):
                     result = None
 
                 # Generate a response from the LLM based on the tool call output
-                generative_prompt = await build_generative_prompt(result, user_query)
+                generative_prompt = await build_generative_response_prompt(result, user_query)
                 result = await call_ollama(prompt=generative_prompt, model=OLLAMA_LLM_MODEL_NAME)
+                result = result.strip('"')  # Remove quotes if they exist
                 print(f"\n🔄 Final Result : {result}")
                 return result
             except httpx.HTTPStatusError as e:
