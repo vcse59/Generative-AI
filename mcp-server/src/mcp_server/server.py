@@ -15,25 +15,25 @@ async def serve():
 
     # Tool: Add two numbers
     @server_mcp.tool(description="Adds two numbers", name="addition")
-    def add(a: int, b: int) -> int:
+    def addition(a: int, b: int) -> int:
         """Adds two numbers."""
         return a + b
 
     # Tool: Subtract two numbers
-    @server_mcp.tool(description="Subtract two numbers", name="subtract")
-    def subtract(a: int, b: int) -> int:
+    @server_mcp.tool(description="Subtract two numbers", name="subtraction")
+    def subtraction(a: int, b: int) -> int:
         """Subtract two numbers."""
         return a - b
     
     # Tool: Multiply two numbers
-    @server_mcp.tool(description="Multiply two numbers", name="multiply")
-    def multiply(a: int, b: int) -> int:
+    @server_mcp.tool(description="Multiply two numbers", name="multiplication")
+    def multiplication(a: int, b: int) -> int:
         """Multiply two numbers."""
         return a * b
 
     # Tool: Divide two numbers, with zero division check
-    @server_mcp.tool(description="Divide two numbers", name="divide")
-    def divide(a: int, b: int) -> float:
+    @server_mcp.tool(description="Divide two numbers", name="division")
+    def division(a: int, b: int) -> float:
         """Divide two numbers."""
         if b == 0:
             raise ValueError("Cannot divide by zero")

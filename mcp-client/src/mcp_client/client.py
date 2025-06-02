@@ -17,13 +17,13 @@ from typing import List
 # load_dotenv()
 
 # Access .env variables if needed
-OLLAMA_LLM_MODEL_NAME = os.environ.get("OLLAMA_LLM_MODEL_NAME") # Default model name, can be overridden by .env
+OLLAMA_LLM_MODEL_NAME = os.environ.get("OLLAMA_LLM_MODEL_NAME") # Default model name, can be overridden by setting shell variable
 
 # MCP Server Endpoint
-MCP_SERVER_ENDPOINT = "http://mcp_server:8080/mcp"  # MCP server endpoint, can be overridden by .env
+MCP_SERVER_ENDPOINT = os.environ.get("MCP_SERVER_ENDPOINT")  # MCP server endpoint, can be overridden by setting shell variable
 
 # Ollama API URL
-OLLAMA_API_URL = "http://ollama:11434"
+OLLAMA_API_URL = os.environ.get("OLLAMA_API_URL")  # Ollama API URL, can be overridden by setting shell variable
 
 # Function to Download Ollama Models
 async def download_ollama_models():

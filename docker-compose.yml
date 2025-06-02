@@ -2,10 +2,7 @@ version: '3.8'
 
 services:
   ollama:
-    build:
-      context: .
-      dockerfile: Dockerfile.ollama  # Use custom Dockerfile
-    image: ollama/ollama
+    build: ./ollama  # Path to the Ollama Dockerfile
     container_name: ollama
     restart: always
     ports:
@@ -32,6 +29,8 @@ services:
     restart: always
     environment:
       - OLLAMA_LLM_MODEL_NAME=llama3.2  # Specify the LLM model name
+      - MCP_SERVER_ENDPOINT=http://mcp_server:8080/mcp # MCP Server endpoint
+      - OLLAMA_API_URL=http://ollama:11434  # Ollama API URL
     depends_on:
       - mcp-server  # Ensure MCP Server is started before mcp-client
     ports:
