@@ -52,27 +52,23 @@ This project uses the following services, each with its own README and specific 
     cd GenerativeAI
     ```
 
-2. **Configure API Keys**  
-
-        Set your DuckDuckGo Web Search API key in the environment variables or configuration file as required.
-
-3. **Build Docker Images**
+2. **Build Docker Images**
 
     ```bash
     docker compose build
     ```
 
-4. **Start the Services**
+3. **Start the Services**
 
     ```bash
     docker compose up
     ```
     This will start all services defined in the `docker-compose.yml` file.
 
-5. **Access the Application**
+4. **Access the Application**
     - Follow the logs or documentation for the specific service endpoints (e.g., `http://localhost:5000`).
 
-6. **Stop the Services**
+5. **Stop the Services**
     ```bash
     docker compose down
     ```
