@@ -56,8 +56,8 @@ The main applications currently available in this repository are:
 
 ## Additional Resources
 
-- [LICENSE](./LICENSE): Details the terms under which this repository is distributed.
-- [SECURITY.md](./SECURITY.md): Guidelines for reporting vulnerabilities and security issues.
+- [LICENSE](/LICENSE): Details the terms under which this repository is distributed.
+- [SECURITY](/SECURITY.md): Guidelines for reporting vulnerabilities and security issues.
 
 ## Learn More
 
