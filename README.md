@@ -54,6 +54,11 @@ The main applications currently available in this repository are:
 - Python 3.10+ (required for most applications)
 - Additional dependencies as listed in each branch's README
 
+## Additional Resources
+
+- [LICENSE](./LICENSE): Details the terms under which this repository is distributed.
+- [SECURITY.md](./SECURITY.md): Guidelines for reporting vulnerabilities and security issues.
+
 ## Learn More
 
 For comprehensive documentation, setup instructions, and advanced usage, please consult the README file in each application branch.
