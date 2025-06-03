@@ -26,22 +26,25 @@ const App = () => {
         if (data.status === 'healthy') {
           setHealthStatus('ok');
           setIsInitialized(true);
-          setHealthText('Service is up and running...Ready to chat!');
           setHealthColor('green');
+          setIsInitialized(true);
         } else if (data.status === 'wait') {
           setHealthStatus('wait');
-          setHealthText('Service is initializing, please wait...');
           setHealthColor('orange');
           setIsInitialized(false);
-        } else {
+        } else if(data.status === 'error') {
+          setHealthStatus('error');
+          setHealthColor('purple');
+          setIsInitialized(false);
+        }else {
           setHealthStatus('fail');
-          setHealthText('Service is unavailable');
           setHealthColor('red');
           setIsInitialized(false);
         }
+        setHealthText(data.message);
       } catch (e) {
         setHealthStatus('fail');
-        setHealthText('Service is unavailable');
+        setHealthText('Backend service is not available');
         setHealthColor('red');
         setIsInitialized(false);
       }

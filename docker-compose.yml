@@ -26,7 +26,7 @@ services:
     container_name: mcp_client
     restart: always
     environment:
-      - OLLAMA_LLM_MODEL_NAME=llama3.2  # Specify the LLM model name
+      - OLLAMA_LLM_MODEL_NAME=llama3.2:latest  # Specify the LLM model name
       - MCP_SERVER_ENDPOINT=http://mcp_server:8080/mcp # MCP Server endpoint
       - OLLAMA_API_URL=http://ollama:11434  # Ollama API URL
     depends_on:

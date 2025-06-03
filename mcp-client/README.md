@@ -48,7 +48,7 @@ MCP Client for interacting with the MCP Server and utilizing available tools (e.
     ### Environment variables are:
 
     ```bash
-        OLLAMA_LLM_MODEL_NAME=llama3.2
+        OLLAMA_LLM_MODEL_NAME=llama3.2:latest
         MCP_SERVER_ENDPOINT=http://127.0.0.1:8080/mcp
         OLLAMA_API_URL=http://127.0.0.1:11434
     ```

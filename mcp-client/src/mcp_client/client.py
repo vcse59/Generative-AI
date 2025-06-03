@@ -12,6 +12,7 @@ from mcp import ClientSession
 
 
 from typing import List
+from enum import Enum, auto
 
 # Load environment variables from .env file
 # load_dotenv()
@@ -25,15 +26,17 @@ MCP_SERVER_ENDPOINT = os.environ.get("MCP_SERVER_ENDPOINT")  # MCP server endpoi
 # Ollama API URL
 OLLAMA_API_URL = os.environ.get("OLLAMA_API_URL")  # Ollama API URL, can be overridden by setting shell variable
 
-async def is_model_downloaded() -> bool:
+class ModelStatus(Enum):
+    DOWNLOADED = auto()
+    NOT_FOUND = auto()
+    ERROR = auto()
+
+async def is_model_downloaded() -> ModelStatus:
     """
     Checks if the specified Ollama model is downloaded locally.
 
-    Args:
-        model_name (str): The name of the model to check (e.g. "llama3").
-
     Returns:
-        bool: True if the model is downloaded, False otherwise.
+        ModelStatus: Enum indicating the model status.
     """
     try:
         print(f"🔄 Checking Ollama model: {OLLAMA_LLM_MODEL_NAME}...")
@@ -41,14 +44,21 @@ async def is_model_downloaded() -> bool:
         response.raise_for_status()
         models = response.json().get("models", [])
 
-        return any(model["name"] == OLLAMA_LLM_MODEL_NAME for model in models)
+        if len(models) == 0:
+            print("No models found in Ollama.")
+            return ModelStatus.NOT_FOUND
+
+        if any(model["name"] == OLLAMA_LLM_MODEL_NAME for model in models):
+            return ModelStatus.DOWNLOADED
+        else:
+            return ModelStatus.NOT_FOUND
 
     except requests.exceptions.RequestException as e:
         print(f"Error checking model availability: {e}")
-        return False
+        return ModelStatus.ERROR
 
 # Function to Download Ollama Models
-async def download_ollama_models():
+def download_ollama_models():
     """Downloads necessary models using Ollama API."""
     try:
         print(f"🔄 Downloading Ollama model: {OLLAMA_LLM_MODEL_NAME}...")
