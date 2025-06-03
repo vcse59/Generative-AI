@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  ollama:
+    build: ./ollama  # Path to the Ollama Dockerfile
+    container_name: ollama
+    restart: always
+    ports:
+      - "11434:11434"  # Ollama API port
+    volumes:
+      - ollama_data:/root/.ollama  # Ollama persistent data volume
+    networks:
+      - ollama_network
+
+  back-end-service:
+    build: ./backend-service  # Path to the backend server Dockerfile
+    container_name: backend-service
+    restart: always
+    environment:
+      - OLLAMA_API_URL=http://ollama:11434  # Ollama API URL
+    ports:
+      - "8000:8000"  # Server port
+    networks:
+      - ollama_network  # Ensure both services are on the same network
+
+  front-end-service:
+    build: ./frontend-chat  # Path to the Front end Dockerfile
+    container_name: frontend-service
+    restart: always
+    depends_on:
+      - back-end-service  # Ensure backend service starts before frontend
+    ports:
+      - "5000:5000"  # Frontend port
+    networks:
+      - ollama_network  # Ensure both services are on the same network
+
+networks:
+  ollama_network:
+    driver: bridge
+
+volumes:
+  ollama_data:  # Named volume for Ollama's data
