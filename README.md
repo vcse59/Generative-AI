@@ -35,7 +35,7 @@ To explore and run any application:
 
 The main applications currently available in this repository are:
 
-- [Web Search-Based RAG Pipeline with Chat Application]([https://github.com/vcse59/GenerativeAI/tree/Ollama_Chatbot](https://github.com/vcse59/GenerativeAI/tree/feature-chatapp-websearch-rag-pipeline)):  
+- [Web Search-Based RAG Pipeline with Chat Application](https://github.com/vcse59/GenerativeAI/tree/feature-chatapp-websearch-rag-pipeline):  
   Processes user queries using web search results within a Retrieval-Augmented Generation pipeline.
 
 - [RAG Application Using PDF as Knowledge Source](https://github.com/vcse59/GenerativeAI/tree/rag-based-application):  
