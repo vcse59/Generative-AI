@@ -43,7 +43,7 @@ MCP Client for interacting with the MCP Server and utilizing available tools (e.
 5. Navigate to MCP client root directory in new terminal and configure following bash variables for mcp-client:
 
     ```bash
-    cd $(git rev-parse --show-toplevel)/mcp-client
+    cd mcp-client
     ```
     ### Environment variables are:
 
