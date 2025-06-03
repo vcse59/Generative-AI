@@ -1,46 +1,84 @@
-## Chat application
+## Chat Application
 
-This application allows users to send messages to an MCP client and displays the responses in a real-time chat interface. The app leverages React Native for the UI and communicates with the MCP backend over HTTP.
+This project is a real-time chat application built with React and TypeScript. It provides a modern UI for sending and receiving messages, and communicates with an backend API.
 
-## Running the App with Docker
+## Features
 
-A `Dockerfile` is provided to run the React Native Metro bundler in a containerized environment.
+- Real-time chat interface
+- Message history display
+- User input with send button
+- Loading indicators for pending responses
+- Error handling for failed requests
+- Responsive design
+
+## Getting Started
 
 ### Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/) installed.
-- React Native development environment set up (Android/iOS emulator, etc.).
-- MCP client accessible (locally or remotely).
+- [Node.js](https://nodejs.org/) (v16+ recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- Backend API accessible
 
-### Build the Docker Image
+### Installation
 
-From the project root, build the Docker image:
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/vcse59/frontend-chat.git
+    cd frontend-chat
+    ```
+2. Install dependencies:
+    ```sh
+    npm install
+    ```
+
+### Running the App Locally
+
+Start the development server:
+```sh
+npm start
+```
+The app will be available at [http://localhost:5000](http://localhost:5000).
+
+### Configuration
+
+- The MCP backend API endpoint can be configured in `src/api/mcpClient.ts`.
+- Environment variables can be set in a `.env` file at the project root.
+
+### Docker Support
+
+A `Dockerfile` is provided for containerized deployment.
+
+#### Build the Docker Image
 
 ```sh
-docker build -t chat-app .
+docker build -t frontend-chat .
 ```
 
-### Start the Metro Bundler
-
-Run the Metro bundler in a container, mounting your project directory:
+#### Run the App in Docker
 
 ```sh
-docker run --rm -it -p 5000:5000 chat-app
+docker run --rm -it -p 5000:5000 frontend-chat
 ```
+Access the app at [http://localhost:5000](http://localhost:5000).
 
-### Connect Your App
+## Usage
 
-- **Web:** Access the app at [http://localhost:5000](http://localhost:5000) in your browser.
+- Type your message in the input box and press "Send".
+- Messages and responses will appear in the chat window.
+- Errors and loading states are displayed as appropriate.
 
+## Troubleshooting
 
-### Troubleshooting
+- Ensure the backend API is running and accessible.
+- Check browser console and terminal logs for errors.
+- For Docker, verify port mappings and network connectivity.
 
-- Check the [React Native Troubleshooting Guide](https://reactnative.dev/docs/troubleshooting).
-- Review Docker logs for errors.
-- Ensure MCP client is reachable and responding.
+## Resources
 
-### Resources
-
-- [React Native Docs](https://reactnative.dev/)
+- [React Documentation](https://react.dev/)
+- [TypeScript Documentation](https://www.typescriptlang.org/)
 - [Docker Documentation](https://docs.docker.com/)
-- [Metro Bundler](https://facebook.github.io/metro/)
+
+## License
+
+This project is licensed under the MIT License.
