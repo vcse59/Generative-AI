@@ -19,6 +19,11 @@ pip install -r requirements.txt
 
 ### Option 1: Local Development
 
+Set the environment variable:
+
+```bash
+OLLAMA_API_URL=http://127.0.0.1:11434
+```
 Start the FastAPI server locally:
 
 ```bash
