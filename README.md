@@ -38,13 +38,13 @@ The main applications currently available in this repository are:
 - [Web Search-Based RAG Pipeline with Chat Application](https://github.com/vcse59/GenerativeAI/tree/feature-chatapp-websearch-rag-pipeline):  
   Processes user queries using web search results within a Retrieval-Augmented Generation pipeline.
 
-- [RAG Application Using PDF as Knowledge Source](https://github.com/vcse59/GenerativeAI/tree/rag-based-application):  
+- [RAG Application Using PDF as Knowledge Source](https://github.com/vcse59/GenerativeAI/tree/feature-rag-pdf-based-application):  
   Supports chat-based interactions with information extracted from PDF documents via a RAG pipeline.
 
-- [RAG Application with Redis and Image Parsing](https://github.com/vcse59/GenerativeAI/tree/redis_image_based_rag_pipeline):  
+- [RAG Application with Redis and Image Parsing](https://github.com/vcse59/GenerativeAI/tree/feature-redis_image_based_rag_pipeline):  
   Leverages Redis for rapid data retrieval and includes image-to-text parsing to enhance chatbot responses in the RAG pipeline.
 
-- [End-to-End MCP Client-Server Chat Application](https://github.com/vcse59/GenerativeAI/tree/mcp-client-server-e2e):  
+- [End-to-End MCP Client-Server Chat Application](https://github.com/vcse59/GenerativeAI/tree/feature-mcp-client-server-e2e):  
   Showcases a complete client-server architecture for chat applications, highlighting the integration of AI models in distributed environments.
 
 ## Prerequisites
