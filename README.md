@@ -1,70 +1,73 @@
 <!--
-    Documentation:
-    This README offers a detailed overview of the GenerativeAI project repository.
-    The repository contains several Generative AI applications, each maintained in its own branch.
-    For setup and usage instructions, please refer to the README file within the relevant branch.
+  Documentation:
+  This README provides an overview of the GenerativeAI project repository.
+  The repository hosts multiple Generative AI applications, each organized in its own branch.
+  For setup and usage details, refer to the README within the respective branch.
 -->
 
 # Generative AI Applications Repository
 
-Welcome to the GenerativeAI repository! This project features a variety of practical Generative AI applications developed using the Ollama framework. Ollama allows you to experiment with large language models locally, making it straightforward to prototype and deploy AI-driven solutions.
+Welcome to the GenerativeAI repository! Here you'll find a collection of practical Generative AI applications built using the Ollama framework. Ollama enables local experimentation with large language models, making it easy to prototype and deploy AI-powered solutions.
 
 ## Repository Structure
 
-Each application resides in a separate branch, enabling you to explore different Generative AI use cases independently. The primary categories of applications include:
+Each application is maintained in a dedicated branch, allowing you to explore various Generative AI use cases independently. The main categories include:
 
-- **Chatbots**: Conversational agents powered by large language models.
-- **Retrieval-Augmented Generation (RAG)**: Solutions that integrate external data sources (such as web content, PDFs, or images) with language models to deliver context-aware responses.
-- **Client-Server Architectures**: Examples of end-to-end systems utilizing AI models in distributed setups.
+- **Chatbots**: Conversational agents utilizing large language models.
+- **Retrieval-Augmented Generation (RAG)**: Applications that combine external data sources (such as web content, PDFs, or images) with language models for context-aware outputs.
+- **Client-Server Architectures**: Examples of distributed systems integrating AI models.
 
 ## Getting Started
 
-To explore and run any application:
+To try out any application:
 
-1. **Clone the repository** to your local system:
+1. **Clone the repository** to your machine:
    ```bash
    git clone https://github.com/vcse59/GenerativeAI.git
    ```
-2. **Switch to the branch** for the application you wish to use:
+2. **Checkout the branch** for the desired application:
    ```bash
    git checkout <branch-name>
    ```
-3. **Follow the instructions** in the README file specific to that branch for setup, dependencies, and usage.
+3. **Follow the branch-specific README** for setup, dependencies, and usage instructions.
 
 ## Available Applications
 
-The main applications currently available in this repository are:
+Currently, the repository includes the following main applications:
 
 - [Web Search-Based RAG Pipeline with Chat Application](https://github.com/vcse59/GenerativeAI/tree/feature-chatapp-websearch-rag-pipeline):  
-  Processes user queries using web search results within a Retrieval-Augmented Generation pipeline.
+  Handles user queries by incorporating web search results into a Retrieval-Augmented Generation pipeline.
 
 - [RAG Application Using PDF as Knowledge Source](https://github.com/vcse59/GenerativeAI/tree/feature-rag-pdf-based-application):  
-  Supports chat-based interactions with information extracted from PDF documents via a RAG pipeline.
+  Enables chat-based interactions using information extracted from PDF documents via a RAG pipeline.
 
 - [RAG Application with Redis and Image Parsing](https://github.com/vcse59/GenerativeAI/tree/feature-redis_image_based_rag_pipeline):  
-  Leverages Redis for rapid data retrieval and includes image-to-text parsing to enhance chatbot responses in the RAG pipeline.
+  Utilizes Redis for fast data retrieval and supports image-to-text parsing to enhance chatbot responses in the RAG pipeline.
 
 - [End-to-End MCP Client-Server Chat Application](https://github.com/vcse59/GenerativeAI/tree/feature-mcp-client-server-e2e):  
-  Showcases a complete client-server architecture for chat applications, highlighting the integration of AI models in distributed environments.
+  Demonstrates a complete client-server chat architecture, showcasing AI model integration in distributed systems.
+
+- [End-to-End A2A (Agent2Agent) Client-Server Application](https://github.com/vcse59/GenerativeAI/blob/feature-a2a-full-implementation):  
+  Presents a full A2A (Agent2Agent) client-server setup, highlighting AI model integration over the A2A protocol.
 
 ## Prerequisites
 
 - [Docker](https://www.docker.com/) (for running Ollama models locally)
-- [Ollama](https://ollama.com/) (see the official documentation for installation and supported models)
+- [Ollama](https://ollama.com/) (refer to the official documentation for installation and supported models)
 - Python 3.10+ (required for most applications)
-- Additional dependencies as listed in each branch's README
+- Additional dependencies listed in each branch's README
 
 ## Additional Resources
 
-- [LICENSE](/LICENSE): Details the terms under which this repository is distributed.
-- [SECURITY](/SECURITY.md): Guidelines for reporting vulnerabilities and security issues.
+- [LICENSE](/LICENSE): Repository distribution terms.
+- [SECURITY](/SECURITY.md): Instructions for reporting vulnerabilities and security concerns.
 
 ## Learn More
 
-For comprehensive documentation, setup instructions, and advanced usage, please consult the README file in each application branch.
+For detailed documentation, setup guides, and advanced usage, see the README in each application branch.
 
-To discover more about Ollama and its features, visit the [official Ollama website](https://ollama.com/).
+To learn more about Ollama and its capabilities, visit the [official Ollama website](https://ollama.com/).
 
 ---
 
-Contributions and suggestions are welcome! Please open issues or submit pull requests for improvements.
+Contributions and feedback are encouraged! Please open issues or submit pull requests to help improve this repository.
