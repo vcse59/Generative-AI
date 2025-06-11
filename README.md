@@ -1,70 +1,144 @@
-<!--
-    Documentation:
-    This README offers a detailed overview of the GenerativeAI project repository.
-    The repository contains several Generative AI applications, each maintained in its own branch.
-    For setup and usage instructions, please refer to the README file within the relevant branch.
--->
+# Basic implementation using Google A2A (Agent to Agent) in python
 
-# Generative AI Applications Repository
+Google's A2A (Agent-to-Agent) framework is designed to enable seamless, secure, and scalable communication between autonomous agents or services. In the context of generative AI, A2A facilitates interactions where agents can exchange messages, delegate tasks, and coordinate actions without direct human intervention. This approach is commonly used in distributed systems, microservices architectures, and AI-driven workflows.
 
-Welcome to the GenerativeAI repository! This project features a variety of practical Generative AI applications developed using the Ollama framework. Ollama allows you to experiment with large language models locally, making it straightforward to prototype and deploy AI-driven solutions.
+Key aspects of Google A2A include:
+- **Standardized Protocols:** Ensures interoperability between heterogeneous agents using well-defined APIs and message formats.
+- **Authentication & Authorization:** Provides secure agent identification and access control, often leveraging OAuth or service accounts.
+- **Scalability:** Supports large-scale deployments where multiple agents communicate concurrently.
+- **Observability:** Integrates with monitoring and logging tools for tracking agent interactions and diagnosing issues.
 
-## Repository Structure
+This repository demonstrates a simplified A2A model inspired by these principles, focusing on agent communication, message routing, and extensibility for AI-driven applications.
 
-Each application resides in a separate branch, enabling you to explore different Generative AI use cases independently. The primary categories of applications include:
 
-- **Chatbots**: Conversational agents powered by large language models.
-- **Retrieval-Augmented Generation (RAG)**: Solutions that integrate external data sources (such as web content, PDFs, or images) with language models to deliver context-aware responses.
-- **Client-Server Architectures**: Examples of end-to-end systems utilizing AI models in distributed setups.
+## Table of Contents
+
+- [Overview](#overview)
+- [Components](#components)
+- [Getting Started](#getting-started)
+- [Docker](#docker)
+- [Security](#security)
+- [License](#license)
+
+## Overview
+
+This project demonstrates a generative AI system with end to end implementation of A2A client and server. It is divided into two main components:
+
+- **agent-client**: The A2A client application.
+- **agent-server**: The A2A server that processes the query coming from **agent-client**.
+
+## Components
+
+### [agent-server](agent_server)
+
+A2A server to process request coming from A2A client.
+
+### [agent-client](agent_client)
+
+A2A client application to connect to A2A server and handle the response.
 
 ## Getting Started
 
-To explore and run any application:
+### Pre-requisite
 
-1. **Clone the repository** to your local system:
-   ```bash
-   git clone https://github.com/vcse59/GenerativeAI.git
-   ```
-2. **Switch to the branch** for the application you wish to use:
-   ```bash
-   git checkout <branch-name>
-   ```
-3. **Follow the instructions** in the README file specific to that branch for setup, dependencies, and usage.
+**Clone the repository:**
 
-## Available Applications
+```bash
+git clone https://github.com/vcse59/GenerativeAI.git
+cd GenerativeAI
+git checkout feature-a2a-full-implementation
+```
+### Native:
 
-The main applications currently available in this repository are:
+#### Navigate to repository root directory:
 
-- [Web Search-Based RAG Pipeline with Chat Application](https://github.com/vcse59/GenerativeAI/tree/feature-chatapp-websearch-rag-pipeline):  
-  Processes user queries using web search results within a Retrieval-Augmented Generation pipeline.
+- **Unix/Linux/macOS (bash/zsh/fish)**
 
-- [RAG Application Using PDF as Knowledge Source](https://github.com/vcse59/GenerativeAI/tree/feature-rag-pdf-based-application):  
-  Supports chat-based interactions with information extracted from PDF documents via a RAG pipeline.
+```bash
+cd "$(git rev-parse --show-toplevel)"
+```
 
-- [RAG Application with Redis and Image Parsing](https://github.com/vcse59/GenerativeAI/tree/feature-redis_image_based_rag_pipeline):  
-  Leverages Redis for rapid data retrieval and includes image-to-text parsing to enhance chatbot responses in the RAG pipeline.
+- **PowerShell (Windows)**
 
-- [End-to-End MCP Client-Server Chat Application](https://github.com/vcse59/GenerativeAI/tree/feature-mcp-client-server-e2e):  
-  Showcases a complete client-server architecture for chat applications, highlighting the integration of AI models in distributed environments.
+```bash
+cd (git rev-parse --show-toplevel)
+```
 
-## Prerequisites
+- **Command Prompt (cmd.exe on Windows)**
+ 
+```bash
+for /f "delims=" %i in ('git rev-parse --show-toplevel') do cd "%i"
+```
 
-- [Docker](https://www.docker.com/) (for running Ollama models locally)
-- [Ollama](https://ollama.com/) (see the official documentation for installation and supported models)
-- Python 3.10+ (required for most applications)
-- Additional dependencies as listed in each branch's README
+#### Create, activate a Python virtual environment and install poetry using pip:
 
-## Additional Resources
+- **Windows (Command Prompt):**
+    ```bash
+    python -m venv .venv
+    .venv\Scripts\activate
+    pip install poetry
+    ```
 
-- [LICENSE](/LICENSE): Details the terms under which this repository is distributed.
-- [SECURITY](/SECURITY.md): Guidelines for reporting vulnerabilities and security issues.
+- **Windows (PowerShell):**
+    ```powershell
+    python -m venv .venv
+    .venv\Scripts\Activate.ps1
+    pip install poetry
+    ```
 
-## Learn More
+- **Unix/Linux/macOS (bash/zsh):**
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install poetry
+    ```
 
-For comprehensive documentation, setup instructions, and advanced usage, please consult the README file in each application branch.
+1. **Install dependencies for each component:**
+    ```bash
+    cd ../agent_server
+    poetry install
+    cd ../agent_client
+    poetry install
 
-To discover more about Ollama and its features, visit the [official Ollama website](https://ollama.com/).
+2. **Navigate to agent-server project and start the A2A server in new terminal with active virtual envrionment:**
+    ```bash
+    poetry run agent-server
+    ```
 
----
+3. **Navigate to agent-client project and start the agent client in new terminal with active virtual envrionment:**
+    ```bash
+    poetry run agent-client
+    ```
 
-Contributions and suggestions are welcome! Please open issues or submit pull requests for improvements.
+### Docker
+
+You can run all components using Docker Compose for easier setup and deployment.
+
+- Navigate to repoistory root directory
+
+1. **Build and start all services:**
+    ```bash
+    docker-compose up --build
+    ```
+
+2. **Stop the services:**
+    ```bash
+    docker-compose down
+    ```
+
+Make sure you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
+
+The `docker-compose.yml` file defines services for `agent-client`, and `agent-server`. Each service is built from its respective directory.
+
+## Usage
+
+- The agent-client and agent-server communicate the message over A2A protocol.
+
+## Security
+
+For information about security policies, reporting vulnerabilities, and best practices, please refer to the [SECURITY.md](./SECURITY.md) document.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+

@@ -5,7 +5,6 @@ description = ""
 authors = [
     {name = "Vivek Yadav",email = "v.cse59@gmail.com"}
 ]
-readme = "README.md"
 dependencies = [
     "a2a-sdk>=0.2.6",
     "uvicorn>=0.34.2",
