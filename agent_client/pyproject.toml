@@ -1,0 +1,27 @@
+[project]
+name = "agent-client"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Vivek Yadav",email = "v.cse59@gmail.com"}
+]
+readme = "README.md"
+dependencies = [
+    "a2a-sdk>=0.2.6",
+    "click>=8.1.8",
+    "httpx>=0.28.1",
+    "requests (>=2.32.4,<3.0.0)",
+]
+
+[tool.poetry]
+license = "MIT"
+
+[tool.poetry.scripts]
+agent-client = "agent_client.__main__:main"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<4.0"

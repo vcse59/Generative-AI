@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+
+  agent-server:
+    build: ./agent_server
+    container_name: agent_server
+    restart: always
+    environment:
+      - A2A_SERVER_HOST=agent_server
+    ports:
+      - "8080:8080"
+    networks:
+      - local_network
+
+  agent-client:
+    build: ./agent_client
+    container_name: agent_client
+    environment:
+      - A2A_SERVER_HOST=agent_server
+    depends_on:
+      - agent-server
+    networks:
+      - local_network
+
+networks:
+  local_network:
+    driver: bridge
