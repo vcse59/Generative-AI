@@ -9,15 +9,26 @@ import json
 import os
 import asyncio
 from dotenv import load_dotenv
+import socket
+import platform
+from contextlib import asynccontextmanager
 
 # Load environment variables from .env file
 load_dotenv()
+
+# download ollama models at startup
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Download models at startup."""
+    await download_ollama_models()
+    yield
 
 # Initialize FastAPI app
 app = FastAPI(
     title="RAG API with PDF Citations",
     description="Retrieval-Augmented Generation (RAG) API using PDFs as a knowledge source.",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Specify the absolute or relative path to the .env file
@@ -49,13 +60,9 @@ os.makedirs(PDF_STORAGE_DIR, exist_ok=True)
 chroma_client = chromadb.PersistentClient(path="./vector_db")
 collection = chroma_client.get_or_create_collection(name="pdf_chunks")
 
-# Ollama API URL
-OLLAMA_API_URL = "http://ollama:11434"
-
 # Input Schema for Queries
 class RequestModel(BaseModel):
     prompt: str
-    model_name: str
 
 # Response Schema
 class ResponseModel(BaseModel):
@@ -79,7 +86,7 @@ def chunk_text(text, chunk_size=500):
 # Function to generate embedding
 async def generate_embedding(text):
     try:
-        response = httpx.post(f"{OLLAMA_API_URL}/api/embeddings", json={"model": "nomic-embed-text", "prompt": text})
+        response = httpx.post(f"http://{get_host_ip()}:11434/api/embeddings", json={"model": OLLAMA_EMBED_MODEL_NAME, "prompt": text})
         response_data = response.json()
         return response_data['embedding']
     except Exception as e:
@@ -112,12 +119,45 @@ async def upload_and_read_pdf(file: UploadFile = File(...)):
         )
 
     # Return the file download link
-    file_download_link = f"http://localhost:8000/pdf/{file.filename}"
+    file_download_link = f"http://{get_host_ip()}:8000/pdf/{file.filename}"
     
     return {
         "message": f"Processed {len(chunks)} chunks from {file.filename}",
         "download_link": file_download_link
     }
+
+def get_host_ip():
+    """
+    Returns the host machine's IP address as seen from inside a Docker container.
+    Handles Linux (Docker), Windows, and macOS environments.
+    """
+    try:
+        system = platform.system()
+        if system == "Linux":
+            # Try to detect the host IP from inside Docker (default gateway)
+            try:
+                with open("/proc/net/route") as f:
+                    for line in f.readlines():
+                        fields = line.strip().split()
+                        if fields[1] != '00000000' or not int(fields[3], 16) & 2:
+                            continue
+                        gateway_hex = fields[2]
+                        gateway = socket.inet_ntoa(bytes.fromhex(gateway_hex)[::-1])
+                        return gateway
+            except Exception:
+                pass
+        elif system == "Windows":
+            # Use the local IP address
+            hostname = socket.gethostname()
+            return socket.gethostbyname(hostname)
+        elif system == "Darwin":
+            # macOS: Use the local IP address
+            hostname = socket.gethostname()
+            return socket.gethostbyname(hostname)
+    except Exception:
+        pass
+    # Fallback to localhost if detection fails
+    return "127.0.0.1"
 
 # Retrieve relevant chunks from vector database
 async def retrieve_relevant_chunks(query, top_k=3):
@@ -131,7 +171,7 @@ async def retrieve_relevant_chunks(query, top_k=3):
     for item in results["metadatas"][0]:
         chunk_text = item["text"]
         source_file = item["source"]
-        citation_url = f"http://localhost:8000/pdf/{source_file}"
+        citation_url = f"http://{get_host_ip()}:8000/pdf/{source_file}"
         
         relevant_chunks.append(chunk_text)
         citation_links.append({"url" : citation_url, "title" : source_file})
@@ -139,15 +179,15 @@ async def retrieve_relevant_chunks(query, top_k=3):
     return relevant_chunks, citation_links
 
 # Query Ollama with retrieved context
-async def query_ollama_with_context(context_chunks, model_name, user_query):
+async def query_ollama_with_context(context_chunks, user_query):
     """Queries Ollama with retrieved context and returns response."""
     context = "\n\n".join(context_chunks)
     prompt = f"Context: {context}\n\nUser Query: {user_query}\n\nAnswer:"
     
     async with httpx.AsyncClient(timeout=900) as client:
         response = await client.post(
-            f"{OLLAMA_API_URL}/api/generate",
-            json={"model": model_name, "prompt": prompt, "stream": False}
+            f"http://{get_host_ip()}:11434/api/generate",
+            json={"model": OLLAMA_LLM_MODEL_NAME, "prompt": prompt, "stream": False}
         )
         response_data = response.json()
         return response_data["response"]
@@ -171,9 +211,9 @@ async def generate_text(request: RequestModel):
         return {"response": "No relevant information found in the documents.", "citation_links": []}
 
     # Query Ollama using retrieved context
-    response = await query_ollama_with_context(relevant_chunks, request.model_name, request.prompt)
+    response = await query_ollama_with_context(relevant_chunks, request.prompt)
 
-    return ResponseModel(response=response, citation_links=citation_links, request=request.model_name)
+    return ResponseModel(response=response, citation_links=citation_links)
 
 # Function to Download Ollama Models
 async def download_ollama_models():
@@ -181,17 +221,22 @@ async def download_ollama_models():
     try:
         model_names = [OLLAMA_EMBED_MODEL_NAME, OLLAMA_LLM_MODEL_NAME]  # List of models
         for model_name in model_names:
-            response = httpx.post(f"{OLLAMA_API_URL}/api/pull", json={"model": model_name})
-            if response.status_code == 200:
-                print(f"Model {model_name} downloaded successfully.")
-            else:
+            response = httpx.post(f"http://{get_host_ip()}:11434/api/pull", json={"model": model_name})
+            if response.status_code != 200:
                 print(f"Failed to download model {model_name}: {response.text}")
     except Exception as e:
         print(f"Error downloading models: {e}")
         raise
 
 # Call the model download function on startup
+'''
 @app.on_event("startup")
 async def startup_event():
     """Download models at startup."""
     await download_ollama_models()
+'''
+
+# Run the FastAPI app using uvicorn
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host=get_host_ip(), port=8000, log_level="info")

@@ -13,7 +13,7 @@ import {
 import RenderHTML from 'react-native-render-html';
 import { OLLAMA_LLM_MODEL_NAME } from '@env';
 
-const ChatbotUI = () => {
+const ChatbotUI = ({ microserviceHost }) => {
     const [messages, setMessages] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
     const scrollViewRef = useRef();
@@ -25,10 +25,10 @@ const ChatbotUI = () => {
     // Process user query and fetch response
     async function processUserQuery(prompt) {
         try {
-            const response = await fetch("http://localhost:8000/generate", {
+            const response = await fetch(`http://${microserviceHost}:8000/generate`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ model_name: OLLAMA_LLM_MODEL_NAME, prompt: prompt })
+                body: JSON.stringify({ prompt: prompt })
             });
 
             if (!response.ok) {
