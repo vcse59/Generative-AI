@@ -5,30 +5,3 @@
 *.pyc
 # Ignore Python cache directories
 __pycache__/
-
-# Ignore common image file types
-*.jpg
-*.jpeg
-*.png
-*.gif
-*.bmp
-*.tiff
-*.tif
-*.webp
-*.svg
-*.ico
-*.heic
-*.heif
-*.raw
-*.psd
-*.ai
-*.eps
-*.jfif
-*.pjpeg
-*.pjp
-*.apng
-*.avif
-*.emf
-*.wmf
-*.indd
-*.svgz
