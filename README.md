@@ -15,7 +15,7 @@ Each application is maintained in a dedicated branch, allowing you to explore va
 
 - **Chatbots**: Conversational agents utilizing large language models.
 - **Retrieval-Augmented Generation (RAG)**: Applications that combine external data sources (such as web content, PDFs, or images) with language models for context-aware outputs.
-- **Client-Server Architectures**: Examples of distributed systems integrating AI models.
+- **CNN (Convolutional Neural Network) Image-Based Model**: Example of training and deploying a CNN for image processing tasks.
 
 ## Getting Started
 
@@ -49,6 +49,9 @@ Currently, the repository includes the following main applications:
 
 - [End-to-End A2A (Agent2Agent) Client-Server Application](https://github.com/vcse59/GenerativeAI/blob/feature-a2a-full-implementation):  
   Presents a full A2A (Agent2Agent) client-server setup, highlighting AI model integration over the A2A protocol.
+
+- [Build and Deploy a CNN (Convolutional Neural Network) with FastAPI](https://github.com/vcse59/GenerativeAI/tree/feature-cnn-model-training-deployment):  
+  Provides a complete example of training a CNN model and deploying it using a FastAPI application.
 
 ## Prerequisites
 
