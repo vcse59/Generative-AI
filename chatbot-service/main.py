@@ -40,6 +40,7 @@ load_dotenv(dotenv_path=dotenv_path)
 # Access variables
 OLLAMA_EMBED_MODEL_NAME =   os.getenv("OLLAMA_EMBED_MODEL_NAME")
 OLLAMA_LLM_MODEL_NAME   =   os.getenv("OLLAMA_LLM_MODEL_NAME")
+IS_HOST_DOCKER          =   os.getenv("IS_HOST_DOCKER")
 
 # CORS Middleware
 app.add_middleware(
@@ -132,6 +133,11 @@ def get_host_ip():
     Handles Linux (Docker), Windows, and macOS environments.
     """
     try:
+        if IS_HOST_DOCKER.lower() == "true":
+            # If running inside Docker, use the default gateway IP
+            return "host.docker.internal"
+
+        # For non-Docker environments, use the local IP address
         system = platform.system()
         if system == "Linux":
             # Try to detect the host IP from inside Docker (default gateway)
@@ -157,7 +163,7 @@ def get_host_ip():
     except Exception:
         pass
     # Fallback to localhost if detection fails
-    return "127.0.0.1"
+    return "localhost"
 
 # Retrieve relevant chunks from vector database
 async def retrieve_relevant_chunks(query, top_k=3):
