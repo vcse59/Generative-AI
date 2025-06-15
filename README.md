@@ -1,73 +1,124 @@
-<!--
-  Documentation:
-  This README provides an overview of the GenerativeAI project repository.
-  The repository hosts multiple Generative AI applications, each organized in its own branch.
-  For setup and usage details, refer to the README within the respective branch.
--->
+# Image-Based Machine Learning Model: Training and Deployment in Python
 
-# Generative AI Applications Repository
+This repository demonstrates a simple image classification pipeline using a Convolutional Neural Network (CNN) trained on "Dogs" and "Cats" images, along with an extensible deployment setup for AI-powered applications.
 
-Welcome to the GenerativeAI repository! Here you'll find a collection of practical Generative AI applications built using the Ollama framework. Ollama enables local experimentation with large language models, making it easy to prototype and deploy AI-powered solutions.
+## Table of Contents
 
-## Repository Structure
+- [Overview](#overview)
+- [Components](#components)
+- [Getting Started](#getting-started)
+- [Docker](#docker)
+- [Usage](#usage)
+- [Security](#security)
+- [License](#license)
 
-Each application is maintained in a dedicated branch, allowing you to explore various Generative AI use cases independently. The main categories include:
+## Overview
 
-- **Chatbots**: Conversational agents utilizing large language models.
-- **Retrieval-Augmented Generation (RAG)**: Applications that combine external data sources (such as web content, PDFs, or images) with language models for context-aware outputs.
-- **Client-Server Architectures**: Examples of distributed systems integrating AI models.
+This project provides a complete workflow for building and deploying a generative AI system. It includes:
+
+- **model-training:** Training a CNN model on a two-class image dataset ("Dogs" and "Cats").
+- **application:** A FastAPI-based service for loading the trained model and serving image predictions.
+
+## Components
+
+### [model-training](model-training)
+
+Trains a CNN model to classify images as either "Dog" or "Cat".
+
+### [application](application)
+
+A FastAPI application that predicts the category of uploaded images.
 
 ## Getting Started
 
-To try out any application:
+### Prerequisites
 
-1. **Clone the repository** to your machine:
+**Clone the repository:**
+
+```bash
+git clone https://github.com/vcse59/GenerativeAI.git
+cd GenerativeAI
+git checkout feature-cnn-model-training-deployment
+```
+
+### Native Setup
+
+#### Navigate to the repository root:
+
+- **Unix/Linux/macOS:**
+  ```bash
+  cd "$(git rev-parse --show-toplevel)"
+  ```
+- **PowerShell (Windows):**
+  ```bash
+  cd (git rev-parse --show-toplevel)
+  ```
+- **Command Prompt (Windows):**
+  ```bash
+  for /f "delims=" %i in ('git rev-parse --show-toplevel') do cd "%i"
+  ```
+
+#### Create and activate a Python virtual environment:
+
+- **Windows (Command Prompt):**
+  ```bash
+  python -m venv .venv
+  .venv\Scripts\activate
+  ```
+- **Windows (PowerShell):**
+  ```powershell
+  python -m venv .venv
+  .venv\Scripts\Activate.ps1
+  ```
+- **Unix/Linux/macOS:**
+  ```bash
+  python3 -m venv .venv
+  source .venv/bin/activate
+  ```
+
+1. **Download the image dataset from [Kaggle](https://www.kaggle.com/datasets/bhavikjikadara/dog-and-cat-classification-dataset):**
+  - Extract the archive and place the "Dog" and "Cat" folders inside `model-training\dataset\`.
+
+    - For example, you may initially have only 10 images each for Dog and Cat in `model-training\dataset\`, but it is recommended to use a larger number of images for better model accuracy.
+
+2. **Split the dataset into training and validation sets (80/20 split):**
    ```bash
-   git clone https://github.com/vcse59/GenerativeAI.git
+   pip install split-folders
+   cd model-training
+   split-folders dataset --ratio .8 .2 --move
    ```
-2. **Checkout the branch** for the desired application:
+
+3. **Install dependencies for model training:**
    ```bash
-   git checkout <branch-name>
+   cd ..
+   pip install -r model-training\requirements.txt
    ```
-3. **Follow the branch-specific README** for setup, dependencies, and usage instructions.
 
-## Available Applications
 
-Currently, the repository includes the following main applications:
+4. **Train the model (in a terminal with the virtual environment activated):**
+   ```bash
+   python model-training\train_model.py
+   ```
+   Training may take 25-40 minutes depending on dataset size. The trained model will be saved as `models/model.h5`.
 
-- [Web Search-Based RAG Pipeline with Chat Application](https://github.com/vcse59/GenerativeAI/tree/feature-chatapp-websearch-rag-pipeline):  
-  Handles user queries by incorporating web search results into a Retrieval-Augmented Generation pipeline.
+5. **Install dependencies for the FastAPI application (in a new terminal with the virtual environment activated):**
+   ```bash
+   pip install -r application\requirements.txt
+   ```
 
-- [RAG Application Using PDF as Knowledge Source](https://github.com/vcse59/GenerativeAI/tree/feature-rag-pdf-based-application):  
-  Enables chat-based interactions using information extracted from PDF documents via a RAG pipeline.
+6. **Start the FastAPI application:**
+   ```bash
+   uvicorn application.main:app --host 0.0.0.0 --port 8000 --reload
+   ```
 
-- [RAG Application with Redis and Image Parsing](https://github.com/vcse59/GenerativeAI/tree/feature-redis_image_based_rag_pipeline):  
-  Utilizes Redis for fast data retrieval and supports image-to-text parsing to enhance chatbot responses in the RAG pipeline.
+## Usage
 
-- [End-to-End MCP Client-Server Chat Application](https://github.com/vcse59/GenerativeAI/tree/feature-mcp-client-server-e2e):  
-  Demonstrates a complete client-server chat architecture, showcasing AI model integration in distributed systems.
+- Visit http://localhost:8000/docs to access the API documentation. Use the `/predict` endpoint to upload a "Dog" or "Cat" image and receive a prediction.
 
-- [End-to-End A2A (Agent2Agent) Client-Server Application](https://github.com/vcse59/GenerativeAI/blob/feature-a2a-full-implementation):  
-  Presents a full A2A (Agent2Agent) client-server setup, highlighting AI model integration over the A2A protocol.
+## Security
 
-## Prerequisites
+For security policies, vulnerability reporting, and best practices, see [SECURITY.md](./SECURITY.md).
 
-- [Docker](https://www.docker.com/) (for running Ollama models locally)
-- [Ollama](https://ollama.com/) (refer to the official documentation for installation and supported models)
-- Python 3.10+ (required for most applications)
-- Additional dependencies listed in each branch's README
+## License
 
-## Additional Resources
-
-- [LICENSE](/LICENSE): Repository distribution terms.
-- [SECURITY](/SECURITY.md): Instructions for reporting vulnerabilities and security concerns.
-
-## Learn More
-
-For detailed documentation, setup guides, and advanced usage, see the README in each application branch.
-
-To learn more about Ollama and its capabilities, visit the [official Ollama website](https://ollama.com/).
-
----
-
-Contributions and feedback are encouraged! Please open issues or submit pull requests to help improve this repository.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
