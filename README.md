@@ -7,7 +7,6 @@ This repository demonstrates a simple image classification pipeline using a Conv
 - [Overview](#overview)
 - [Components](#components)
 - [Getting Started](#getting-started)
-- [Docker](#docker)
 - [Usage](#usage)
 - [Security](#security)
 - [License](#license)
