@@ -17,20 +17,6 @@ Each application is maintained in a dedicated branch, allowing you to explore va
 - **Retrieval-Augmented Generation (RAG)**: Applications that combine external data sources (such as web content, PDFs, or images) with language models for context-aware outputs.
 - **CNN (Convolutional Neural Network) Image-Based Model**: Example of training and deploying a CNN for image processing tasks.
 
-## Getting Started
-
-To try out any application:
-
-1. **Clone the repository** to your machine:
-   ```bash
-   git clone https://github.com/vcse59/GenerativeAI.git
-   ```
-2. **Checkout the branch** for the desired application:
-   ```bash
-   git checkout <branch-name>
-   ```
-3. **Follow the branch-specific README** for setup, dependencies, and usage instructions.
-
 ## Available Applications
 
 Currently, the repository includes the following main applications:
