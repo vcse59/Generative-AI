@@ -35,26 +35,26 @@ To try out any application:
 
 Currently, the repository includes the following main applications:
 
-- [Web Search-Based RAG Pipeline with Chat Application](https://github.com/vcse59/Generative-AI-RAG-WebSearch-Application):  
+1. [Web Search-Based RAG Pipeline with Chat Application](https://github.com/vcse59/Generative-AI-RAG-WebSearch-Application):  
   Handles user queries by incorporating web search results into a Retrieval-Augmented Generation pipeline.
 
-- [RAG Application Using PDF as Knowledge Source](https://github.com/vcse59/Generative-AI-RAG-PDF-Application):  
+2. [RAG Application Using PDF as Knowledge Source](https://github.com/vcse59/Generative-AI-RAG-PDF-Application):  
   Enables chat-based interactions using information extracted from PDF documents via a RAG pipeline.
 
-- [RAG Application with Redis and Image Parsing](https://github.com/vcse59/Generative-AI-RAG-ImageText-Application):  
+3. [RAG Application with Redis and Image Parsing](https://github.com/vcse59/Generative-AI-RAG-ImageText-Application):  
   Utilizes Redis for fast data retrieval and supports image-to-text parsing to enhance chatbot responses in the RAG pipeline.
 
-- [End-to-End MCP Client-Server Chat Application](https://github.com/vcse59/Generative-AI-MCP-Application):  
+4. [End-to-End MCP Client-Server Chat Application](https://github.com/vcse59/Generative-AI-MCP-Application):  
   Demonstrates a complete client-server chat architecture, showcasing AI model integration in distributed systems.
 
-- [End-to-End A2A (Agent2Agent) Client-Server Application](https://github.com/vcse59/Generative-AI-A2A-Application):  
+5. [End-to-End A2A (Agent2Agent) Client-Server Application](https://github.com/vcse59/Generative-AI-A2A-Application):  
   Presents a full A2A (Agent2Agent) client-server setup, highlighting AI model integration over the A2A protocol.
 
-- [Build and Deploy a CNN (Convolutional Neural Network) with FastAPI](https://github.com/vcse59/Generative-AI-ML-Model-Deploy):  
+6. [Build and Deploy a CNN (Convolutional Neural Network) with FastAPI](https://github.com/vcse59/Generative-AI-ML-Model-Deploy):  
   Provides a complete example of training a CNN model and deploying it using a FastAPI application.
 
-- [Copilot Studio Direct Line API based React Native application](https://github.com/vcse59/Generative-AI-Copilot-DirectLine-Application):  
- This project demonstrates how to integrate a React Native application with a Copilot Studio agent using the Direct Line API.
+7. [Copilot Studio Direct Line API based React Native application](https://github.com/vcse59/Generative-AI-Copilot-DirectLine-Application):  
+  This project demonstrates how to integrate a React Native application with a Copilot Studio agent using the Direct Line API.
 
 ## Prerequisites
 
