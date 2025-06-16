@@ -53,6 +53,9 @@ Currently, the repository includes the following main applications:
 - [Build and Deploy a CNN (Convolutional Neural Network) with FastAPI](https://github.com/vcse59/Generative-AI-ML-Model-Deploy):  
   Provides a complete example of training a CNN model and deploying it using a FastAPI application.
 
+- [Copilot Studio Direct Line API based React Native application](https://github.com/vcse59/Generative-AI-Copilot-DirectLine-Application):  
+ This project demonstrates how to integrate a React Native application with a Copilot Studio agent using the Direct Line API.
+
 ## Prerequisites
 
 - [Docker](https://www.docker.com/) (for running Ollama models locally)
